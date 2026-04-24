@@ -40,19 +40,20 @@ The skill is added through the Cowork **Customize** menu, and from that point on
 
 ### Step-by-step
 
-1. **Open Cowork** on your computer.
-2. **Click the Customize button** in the Cowork interface. (It's the menu where you manage your plugins and skills.)
-3. **Go to the Plugins / Skills section.** You should see a list of installed plugins and an option to browse or add new ones.
-4. **Search for `ordergroove-slides`** (or browse for it by name if search isn't available).
-5. **Click Install / Add.** Cowork will pull the skill into your plugins folder.
-6. **Restart or refresh the conversation** if Cowork prompts you to. Some skills need a fresh session to register.
-7. **Confirm it's loaded** by starting a new conversation and typing:
+1. **Download the Zip plugin file.** Save it somewhere you can find it (Downloads is fine).
+2. **Open Cowork** on your computer.
+3. **Open the Customize menu.** This is where Cowork manages your installed plugins and skills.
+4. **Choose the option to install from a file.** Depending on your version, this may be labeled something like *"Install plugin from file"*, *"Add plugin"*, or *"Import plugin"*. It's the option that lets you select a `.zip` or `.plugin` file from your computer — not the search / marketplace option.
+5. **Select the zip file** from wherever you saved it.
+6. **Confirm the install.** Cowork should show `ordergroove-slides` in your list of installed plugins once it's done.
+7. **Start a new conversation** so Cowork picks up the newly installed skill.
+8. **Confirm it's loaded.** In the new conversation, type:
 
    ```text
    /ordergroove-slides
    ```
 
-   If the slash-command autocomplete shows `ordergroove-slides` in the list, you're ready to go. You can also just ask Claude: *"what skills do you have?"* and it should list `ordergroove-slides`.
+   If the slash-command autocomplete shows `ordergroove-slides` in the list, you're ready to go. You can also ask Claude: *"what skills do you have?"* and it should list `ordergroove-slides`.
 
 ### What happens after installation
 
