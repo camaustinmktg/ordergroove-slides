@@ -1,0 +1,2716 @@
+[
+  {
+    "name": "autorenew",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "renewal",
+      "recurring",
+      "auto-ship",
+      "repeat order",
+      "subscription",
+      "refresh",
+      "auto-renew"
+    ],
+    "figmaId": "25:782"
+  },
+  {
+    "name": "subscriptions",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "subscription",
+      "plan",
+      "membership",
+      "subscription catalog",
+      "recurring delivery",
+      "program"
+    ],
+    "figmaId": "25:783"
+  },
+  {
+    "name": "event_repeat",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "recurring date",
+      "repeat schedule",
+      "next order date",
+      "frequency",
+      "cadence",
+      "renewal date"
+    ],
+    "figmaId": "25:784"
+  },
+  {
+    "name": "repeat",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "reorder",
+      "repeat purchase",
+      "replenishment",
+      "loop",
+      "recurring",
+      "again"
+    ],
+    "figmaId": "25:785"
+  },
+  {
+    "name": "cycle",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "lifecycle",
+      "loop",
+      "flywheel",
+      "continuous",
+      "circular",
+      "customer lifecycle"
+    ],
+    "figmaId": "25:786"
+  },
+  {
+    "name": "all_inclusive",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "infinite",
+      "unlimited",
+      "lifetime value",
+      "forever",
+      "endless",
+      "all-inclusive"
+    ],
+    "figmaId": "25:787"
+  },
+  {
+    "name": "restart_alt",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "restart",
+      "reactivate",
+      "resume",
+      "win-back",
+      "reset",
+      "start over"
+    ],
+    "figmaId": "25:788"
+  },
+  {
+    "name": "history",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "order history",
+      "past orders",
+      "look back",
+      "previous",
+      "rewind",
+      "timeline"
+    ],
+    "figmaId": "25:789"
+  },
+  {
+    "name": "calendar_month",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "calendar",
+      "monthly",
+      "schedule",
+      "delivery date",
+      "month",
+      "dates"
+    ],
+    "figmaId": "25:790"
+  },
+  {
+    "name": "edit_calendar",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "reschedule",
+      "change date",
+      "edit schedule",
+      "delivery date",
+      "adjust frequency",
+      "move order"
+    ],
+    "figmaId": "25:791"
+  },
+  {
+    "name": "pause_circle",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "pause",
+      "pause subscription",
+      "hold",
+      "suspend",
+      "stop temporarily",
+      "break"
+    ],
+    "figmaId": "25:792"
+  },
+  {
+    "name": "play_circle",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "resume",
+      "play",
+      "start",
+      "reactivate",
+      "video",
+      "demo"
+    ],
+    "figmaId": "25:793"
+  },
+  {
+    "name": "skip_next",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "skip",
+      "skip order",
+      "next",
+      "skip shipment",
+      "advance",
+      "fast forward"
+    ],
+    "figmaId": "25:794"
+  },
+  {
+    "name": "swap_horiz",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "swap",
+      "exchange",
+      "switch product",
+      "substitute",
+      "trade",
+      "replace"
+    ],
+    "figmaId": "25:795"
+  },
+  {
+    "name": "card_membership",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "membership",
+      "member card",
+      "loyalty card",
+      "vip",
+      "perks",
+      "member benefits"
+    ],
+    "figmaId": "25:796"
+  },
+  {
+    "name": "package_2",
+    "category": "Subscriptions & Renewals",
+    "keywords": [
+      "subscription box",
+      "box",
+      "package",
+      "parcel",
+      "product",
+      "bundle"
+    ],
+    "figmaId": "25:797"
+  },
+  {
+    "name": "local_shipping",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "shipping",
+      "delivery",
+      "truck",
+      "fulfillment",
+      "freight",
+      "logistics"
+    ],
+    "figmaId": "25:798"
+  },
+  {
+    "name": "delivery_truck_speed",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "fast shipping",
+      "expedited",
+      "express delivery",
+      "speed",
+      "same-day",
+      "quick fulfillment"
+    ],
+    "figmaId": "25:799"
+  },
+  {
+    "name": "package",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "box",
+      "parcel",
+      "shipment",
+      "order",
+      "product",
+      "packaging"
+    ],
+    "figmaId": "25:800"
+  },
+  {
+    "name": "orders",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "order management",
+      "purchases",
+      "order volume",
+      "basket",
+      "bin",
+      "transactions"
+    ],
+    "figmaId": "25:801"
+  },
+  {
+    "name": "inventory_2",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "inventory",
+      "stock",
+      "archive",
+      "storage",
+      "catalog",
+      "sku"
+    ],
+    "figmaId": "25:802"
+  },
+  {
+    "name": "warehouse",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "distribution center",
+      "3pl",
+      "fulfillment center",
+      "storage",
+      "logistics",
+      "depot"
+    ],
+    "figmaId": "25:803"
+  },
+  {
+    "name": "conveyor_belt",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "fulfillment",
+      "operations",
+      "conveyor",
+      "processing",
+      "pick and pack",
+      "production line"
+    ],
+    "figmaId": "25:804"
+  },
+  {
+    "name": "shopping_cart",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "cart",
+      "shopping",
+      "checkout",
+      "purchase",
+      "ecommerce",
+      "basket"
+    ],
+    "figmaId": "25:805"
+  },
+  {
+    "name": "add_shopping_cart",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "add to cart",
+      "upsell",
+      "add item",
+      "add-on",
+      "cross-sell",
+      "purchase"
+    ],
+    "figmaId": "25:806"
+  },
+  {
+    "name": "shopping_cart_checkout",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "checkout",
+      "conversion",
+      "purchase flow",
+      "buy",
+      "complete order",
+      "cart"
+    ],
+    "figmaId": "25:807"
+  },
+  {
+    "name": "shopping_bag",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "shopping",
+      "retail",
+      "purchase",
+      "dtc",
+      "shopper",
+      "buy"
+    ],
+    "figmaId": "25:808"
+  },
+  {
+    "name": "storefront",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "store",
+      "shop",
+      "merchant",
+      "retailer",
+      "brand site",
+      "retail"
+    ],
+    "figmaId": "25:809"
+  },
+  {
+    "name": "receipt_long",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "receipt",
+      "order confirmation",
+      "invoice",
+      "order details",
+      "transaction",
+      "billing record"
+    ],
+    "figmaId": "25:810"
+  },
+  {
+    "name": "assignment_return",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "returns",
+      "return order",
+      "refund",
+      "rma",
+      "send back",
+      "reverse logistics"
+    ],
+    "figmaId": "25:811"
+  },
+  {
+    "name": "location_on",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "location",
+      "address",
+      "map pin",
+      "region",
+      "shipping address",
+      "store locator"
+    ],
+    "figmaId": "25:812"
+  },
+  {
+    "name": "barcode",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "sku",
+      "product",
+      "scan",
+      "inventory",
+      "upc",
+      "product id"
+    ],
+    "figmaId": "25:813"
+  },
+  {
+    "name": "eco",
+    "category": "Orders & Shipping",
+    "keywords": [
+      "sustainability",
+      "eco-friendly",
+      "green",
+      "leaf",
+      "natural",
+      "environment"
+    ],
+    "figmaId": "25:814"
+  },
+  {
+    "name": "credit_card",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "payment",
+      "card",
+      "billing",
+      "checkout",
+      "payment method",
+      "card on file"
+    ],
+    "figmaId": "25:815"
+  },
+  {
+    "name": "payments",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "cash",
+      "revenue",
+      "money",
+      "transactions",
+      "billing",
+      "bills"
+    ],
+    "figmaId": "25:816"
+  },
+  {
+    "name": "account_balance_wallet",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "wallet",
+      "balance",
+      "stored value",
+      "credit",
+      "digital wallet",
+      "funds"
+    ],
+    "figmaId": "25:817"
+  },
+  {
+    "name": "attach_money",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "dollar",
+      "money",
+      "price",
+      "revenue",
+      "cost",
+      "usd"
+    ],
+    "figmaId": "25:818"
+  },
+  {
+    "name": "paid",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "payment received",
+      "money",
+      "revenue",
+      "dollar",
+      "earnings",
+      "coin"
+    ],
+    "figmaId": "25:819"
+  },
+  {
+    "name": "savings",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "piggy bank",
+      "save money",
+      "discount",
+      "value",
+      "budget"
+    ],
+    "figmaId": "25:820"
+  },
+  {
+    "name": "percent",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "percentage",
+      "rate",
+      "discount",
+      "conversion rate",
+      "ratio",
+      "share"
+    ],
+    "figmaId": "25:821"
+  },
+  {
+    "name": "percent_discount",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "discount",
+      "promo",
+      "coupon",
+      "sale",
+      "offer",
+      "percent off"
+    ],
+    "figmaId": "25:822"
+  },
+  {
+    "name": "sell",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "price tag",
+      "pricing",
+      "sale",
+      "tag",
+      "price point",
+      "label"
+    ],
+    "figmaId": "25:823"
+  },
+  {
+    "name": "receipt",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "invoice",
+      "bill",
+      "transaction",
+      "order total",
+      "billing",
+      "statement"
+    ],
+    "figmaId": "25:824"
+  },
+  {
+    "name": "request_quote",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "quote",
+      "pricing request",
+      "estimate",
+      "proposal",
+      "invoice",
+      "cost"
+    ],
+    "figmaId": "25:825"
+  },
+  {
+    "name": "price_change",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "pricing update",
+      "price increase",
+      "repricing",
+      "price adjustment",
+      "dynamic pricing",
+      "price drop"
+    ],
+    "figmaId": "25:826"
+  },
+  {
+    "name": "currency_exchange",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "currency",
+      "exchange",
+      "multi-currency",
+      "international",
+      "conversion",
+      "fx"
+    ],
+    "figmaId": "25:827"
+  },
+  {
+    "name": "account_balance",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "bank",
+      "finance",
+      "institution",
+      "banking",
+      "financial services",
+      "government"
+    ],
+    "figmaId": "25:828"
+  },
+  {
+    "name": "add_card",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "new payment method",
+      "update card",
+      "card on file",
+      "add payment",
+      "billing"
+    ],
+    "figmaId": "25:829"
+  },
+  {
+    "name": "credit_card_off",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "failed payment",
+      "declined card",
+      "expired card",
+      "involuntary churn",
+      "payment failure",
+      "dunning"
+    ],
+    "figmaId": "25:830"
+  },
+  {
+    "name": "calculate",
+    "category": "Payments & Pricing",
+    "keywords": [
+      "calculator",
+      "roi",
+      "math",
+      "estimate",
+      "pricing model",
+      "numbers"
+    ],
+    "figmaId": "25:831"
+  },
+  {
+    "name": "favorite",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "love",
+      "heart",
+      "wishlist",
+      "like",
+      "customer love",
+      "favourite"
+    ],
+    "figmaId": "25:832"
+  },
+  {
+    "name": "loyalty",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "rewards",
+      "loyalty program",
+      "perks",
+      "points",
+      "tag",
+      "brand love"
+    ],
+    "figmaId": "25:833"
+  },
+  {
+    "name": "redeem",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "gift",
+      "reward",
+      "gift card",
+      "gifting",
+      "offer",
+      "present"
+    ],
+    "figmaId": "25:834"
+  },
+  {
+    "name": "stars",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "rating",
+      "star badge",
+      "reward",
+      "premium",
+      "points",
+      "top rated"
+    ],
+    "figmaId": "25:835"
+  },
+  {
+    "name": "star",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "rating",
+      "review",
+      "favorite",
+      "highlight",
+      "quality",
+      "best"
+    ],
+    "figmaId": "25:836"
+  },
+  {
+    "name": "trophy",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "winner",
+      "award",
+      "achievement",
+      "success",
+      "top performer",
+      "cup"
+    ],
+    "figmaId": "25:837"
+  },
+  {
+    "name": "workspace_premium",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "premium",
+      "certified",
+      "award",
+      "badge",
+      "vip",
+      "tier"
+    ],
+    "figmaId": "25:838"
+  },
+  {
+    "name": "diamond",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "premium",
+      "vip",
+      "high value",
+      "luxury",
+      "top tier",
+      "gem"
+    ],
+    "figmaId": "25:839"
+  },
+  {
+    "name": "thumb_up",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "like",
+      "approve",
+      "positive",
+      "satisfaction",
+      "good",
+      "yes"
+    ],
+    "figmaId": "25:840"
+  },
+  {
+    "name": "volunteer_activism",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "care",
+      "giving",
+      "charity",
+      "customer care",
+      "generosity",
+      "donation"
+    ],
+    "figmaId": "25:841"
+  },
+  {
+    "name": "sentiment_satisfied",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "happy",
+      "satisfied",
+      "positive sentiment",
+      "customer satisfaction",
+      "csat",
+      "smile"
+    ],
+    "figmaId": "25:842"
+  },
+  {
+    "name": "sentiment_dissatisfied",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "unhappy",
+      "dissatisfied",
+      "negative sentiment",
+      "churn risk",
+      "complaint",
+      "frown"
+    ],
+    "figmaId": "25:843"
+  },
+  {
+    "name": "celebration",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "celebrate",
+      "launch",
+      "milestone",
+      "party",
+      "success",
+      "win"
+    ],
+    "figmaId": "25:844"
+  },
+  {
+    "name": "handshake",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "partnership",
+      "deal",
+      "agreement",
+      "trust",
+      "relationship",
+      "partner"
+    ],
+    "figmaId": "25:845"
+  },
+  {
+    "name": "recommend",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "endorsement",
+      "referral",
+      "approve",
+      "nps",
+      "thumbs up",
+      "recommendation"
+    ],
+    "figmaId": "25:846"
+  },
+  {
+    "name": "reviews",
+    "category": "Retention & Loyalty",
+    "keywords": [
+      "ratings",
+      "testimonials",
+      "feedback",
+      "star rating",
+      "social proof",
+      "review"
+    ],
+    "figmaId": "25:847"
+  },
+  {
+    "name": "person",
+    "category": "Customers & People",
+    "keywords": [
+      "customer",
+      "user",
+      "profile",
+      "shopper",
+      "individual",
+      "subscriber"
+    ],
+    "figmaId": "25:848"
+  },
+  {
+    "name": "group",
+    "category": "Customers & People",
+    "keywords": [
+      "customers",
+      "users",
+      "team",
+      "audience",
+      "people",
+      "two people"
+    ],
+    "figmaId": "25:849"
+  },
+  {
+    "name": "groups",
+    "category": "Customers & People",
+    "keywords": [
+      "community",
+      "segment",
+      "audience",
+      "team",
+      "crowd",
+      "cohort"
+    ],
+    "figmaId": "25:850"
+  },
+  {
+    "name": "diversity_3",
+    "category": "Customers & People",
+    "keywords": [
+      "community",
+      "inclusion",
+      "team",
+      "people",
+      "collaboration",
+      "diverse audience"
+    ],
+    "figmaId": "25:851"
+  },
+  {
+    "name": "person_add",
+    "category": "Customers & People",
+    "keywords": [
+      "new customer",
+      "acquisition",
+      "sign up",
+      "add user",
+      "onboarding",
+      "new subscriber"
+    ],
+    "figmaId": "25:852"
+  },
+  {
+    "name": "person_remove",
+    "category": "Customers & People",
+    "keywords": [
+      "churn",
+      "cancellation",
+      "lost customer",
+      "remove user",
+      "unsubscribe",
+      "attrition"
+    ],
+    "figmaId": "25:853"
+  },
+  {
+    "name": "person_check",
+    "category": "Customers & People",
+    "keywords": [
+      "retained customer",
+      "verified customer",
+      "active subscriber",
+      "approved",
+      "loyal customer",
+      "confirmed"
+    ],
+    "figmaId": "25:854"
+  },
+  {
+    "name": "account_circle",
+    "category": "Customers & People",
+    "keywords": [
+      "account",
+      "profile",
+      "customer portal",
+      "login",
+      "user",
+      "my account"
+    ],
+    "figmaId": "25:855"
+  },
+  {
+    "name": "manage_accounts",
+    "category": "Customers & People",
+    "keywords": [
+      "account management",
+      "admin",
+      "user settings",
+      "customer settings",
+      "permissions",
+      "roles"
+    ],
+    "figmaId": "25:856"
+  },
+  {
+    "name": "support_agent",
+    "category": "Customers & People",
+    "keywords": [
+      "customer support",
+      "service agent",
+      "help desk",
+      "cx",
+      "customer success",
+      "contact center"
+    ],
+    "figmaId": "25:857"
+  },
+  {
+    "name": "face",
+    "category": "Customers & People",
+    "keywords": [
+      "customer",
+      "persona",
+      "person",
+      "user",
+      "human",
+      "shopper"
+    ],
+    "figmaId": "25:858"
+  },
+  {
+    "name": "family_restroom",
+    "category": "Customers & People",
+    "keywords": [
+      "family",
+      "household",
+      "parents",
+      "kids",
+      "consumer",
+      "people"
+    ],
+    "figmaId": "25:859"
+  },
+  {
+    "name": "badge",
+    "category": "Customers & People",
+    "keywords": [
+      "id",
+      "employee",
+      "credentials",
+      "identity",
+      "staff",
+      "name tag"
+    ],
+    "figmaId": "25:860"
+  },
+  {
+    "name": "person_search",
+    "category": "Customers & People",
+    "keywords": [
+      "find customer",
+      "customer lookup",
+      "segment search",
+      "recruiting",
+      "search people",
+      "persona research"
+    ],
+    "figmaId": "25:861"
+  },
+  {
+    "name": "corporate_fare",
+    "category": "Customers & People",
+    "keywords": [
+      "company",
+      "enterprise",
+      "business",
+      "organization",
+      "office",
+      "b2b"
+    ],
+    "figmaId": "25:862"
+  },
+  {
+    "name": "partner_exchange",
+    "category": "Customers & People",
+    "keywords": [
+      "partners",
+      "partner network",
+      "exchange",
+      "collaboration",
+      "ecosystem",
+      "community"
+    ],
+    "figmaId": "25:863"
+  },
+  {
+    "name": "bar_chart",
+    "category": "Data & Growth",
+    "keywords": [
+      "metrics",
+      "data",
+      "results",
+      "reporting",
+      "comparison",
+      "chart"
+    ],
+    "figmaId": "25:864"
+  },
+  {
+    "name": "trending_up",
+    "category": "Data & Growth",
+    "keywords": [
+      "growth",
+      "increase",
+      "uplift",
+      "revenue growth",
+      "improvement",
+      "upward trend"
+    ],
+    "figmaId": "25:865"
+  },
+  {
+    "name": "trending_down",
+    "category": "Data & Growth",
+    "keywords": [
+      "decline",
+      "decrease",
+      "drop",
+      "reduction",
+      "lower churn",
+      "downward trend"
+    ],
+    "figmaId": "25:866"
+  },
+  {
+    "name": "trending_flat",
+    "category": "Data & Growth",
+    "keywords": [
+      "flat",
+      "steady",
+      "stable",
+      "unchanged",
+      "plateau",
+      "next"
+    ],
+    "figmaId": "25:867"
+  },
+  {
+    "name": "show_chart",
+    "category": "Data & Growth",
+    "keywords": [
+      "line chart",
+      "trend",
+      "performance",
+      "chart",
+      "over time",
+      "analytics"
+    ],
+    "figmaId": "25:868"
+  },
+  {
+    "name": "monitoring",
+    "category": "Data & Growth",
+    "keywords": [
+      "analytics",
+      "performance",
+      "tracking",
+      "kpis",
+      "metrics"
+    ],
+    "figmaId": "25:869"
+  },
+  {
+    "name": "analytics",
+    "category": "Data & Growth",
+    "keywords": [
+      "report",
+      "insights",
+      "dashboard",
+      "metrics",
+      "data"
+    ],
+    "figmaId": "25:870"
+  },
+  {
+    "name": "pie_chart",
+    "category": "Data & Growth",
+    "keywords": [
+      "share",
+      "breakdown",
+      "mix",
+      "distribution",
+      "segments"
+    ],
+    "figmaId": "25:871"
+  },
+  {
+    "name": "leaderboard",
+    "category": "Data & Growth",
+    "keywords": [
+      "ranking",
+      "benchmark",
+      "top performers",
+      "podium",
+      "comparison"
+    ],
+    "figmaId": "25:872"
+  },
+  {
+    "name": "query_stats",
+    "category": "Data & Growth",
+    "keywords": [
+      "insights",
+      "analysis",
+      "data exploration",
+      "investigate",
+      "research",
+      "stats"
+    ],
+    "figmaId": "25:873"
+  },
+  {
+    "name": "search",
+    "category": "Data & Growth",
+    "keywords": [
+      "find",
+      "discover",
+      "look up",
+      "explore",
+      "seo",
+      "magnifying glass"
+    ],
+    "figmaId": "25:874"
+  },
+  {
+    "name": "speed",
+    "category": "Data & Growth",
+    "keywords": [
+      "performance",
+      "fast",
+      "gauge",
+      "efficiency",
+      "velocity",
+      "speedometer"
+    ],
+    "figmaId": "25:875"
+  },
+  {
+    "name": "ads_click",
+    "category": "Data & Growth",
+    "keywords": [
+      "click",
+      "ctr",
+      "ads",
+      "conversion",
+      "engagement",
+      "call to action"
+    ],
+    "figmaId": "25:876"
+  },
+  {
+    "name": "conversion_path",
+    "category": "Data & Growth",
+    "keywords": [
+      "customer journey",
+      "funnel",
+      "path to purchase",
+      "attribution",
+      "flow"
+    ],
+    "figmaId": "25:877"
+  },
+  {
+    "name": "filter_alt",
+    "category": "Data & Growth",
+    "keywords": [
+      "filter",
+      "funnel",
+      "segmentation",
+      "narrow down",
+      "criteria",
+      "refine"
+    ],
+    "figmaId": "25:878"
+  },
+  {
+    "name": "target",
+    "category": "Data & Growth",
+    "keywords": [
+      "goal",
+      "objective",
+      "aim",
+      "focus",
+      "bullseye",
+      "targeting"
+    ],
+    "figmaId": "25:879"
+  },
+  {
+    "name": "rocket_launch",
+    "category": "Data & Growth",
+    "keywords": [
+      "launch",
+      "growth",
+      "go-live",
+      "accelerate",
+      "scale",
+      "rocket"
+    ],
+    "figmaId": "25:880"
+  },
+  {
+    "name": "database",
+    "category": "Data & Growth",
+    "keywords": [
+      "data",
+      "storage",
+      "records",
+      "data warehouse",
+      "cdp"
+    ],
+    "figmaId": "25:881"
+  },
+  {
+    "name": "dashboard",
+    "category": "Data & Growth",
+    "keywords": [
+      "overview",
+      "admin",
+      "layout",
+      "modules",
+      "control panel"
+    ],
+    "figmaId": "25:882"
+  },
+  {
+    "name": "api",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "integration",
+      "developer",
+      "connection",
+      "endpoints",
+      "interface"
+    ],
+    "figmaId": "25:883"
+  },
+  {
+    "name": "integration_instructions",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "integration",
+      "developer docs",
+      "code",
+      "implementation",
+      "setup guide",
+      "technical"
+    ],
+    "figmaId": "25:884"
+  },
+  {
+    "name": "hub",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "network",
+      "connected",
+      "ecosystem",
+      "central platform",
+      "integrations",
+      "nodes"
+    ],
+    "figmaId": "25:885"
+  },
+  {
+    "name": "extension",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "plugin",
+      "add-on",
+      "app",
+      "puzzle piece",
+      "module"
+    ],
+    "figmaId": "25:886"
+  },
+  {
+    "name": "webhook",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "event",
+      "trigger",
+      "automation",
+      "real-time",
+      "event stream"
+    ],
+    "figmaId": "25:887"
+  },
+  {
+    "name": "cloud",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "saas",
+      "hosted",
+      "platform",
+      "infrastructure",
+      "online"
+    ],
+    "figmaId": "25:888"
+  },
+  {
+    "name": "cloud_sync",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "sync",
+      "data sync",
+      "real-time",
+      "backup",
+      "update"
+    ],
+    "figmaId": "25:889"
+  },
+  {
+    "name": "code",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "developer",
+      "engineering",
+      "custom code",
+      "headless",
+      "technical",
+      "brackets"
+    ],
+    "figmaId": "25:890"
+  },
+  {
+    "name": "account_tree",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "hierarchy",
+      "structure",
+      "architecture",
+      "org chart",
+      "workflow",
+      "tree"
+    ],
+    "figmaId": "25:891"
+  },
+  {
+    "name": "link",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "connect",
+      "integration",
+      "url",
+      "connection",
+      "chain",
+      "linked"
+    ],
+    "figmaId": "25:892"
+  },
+  {
+    "name": "widgets",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "components",
+      "modules",
+      "apps",
+      "building blocks",
+      "ui"
+    ],
+    "figmaId": "25:893"
+  },
+  {
+    "name": "stacks",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "tech stack",
+      "layers",
+      "platform",
+      "infrastructure",
+      "layered",
+      "stack"
+    ],
+    "figmaId": "25:894"
+  },
+  {
+    "name": "settings",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "configuration",
+      "admin",
+      "setup",
+      "gear",
+      "preferences"
+    ],
+    "figmaId": "25:895"
+  },
+  {
+    "name": "tune",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "customize",
+      "controls",
+      "adjust",
+      "configure",
+      "options",
+      "sliders"
+    ],
+    "figmaId": "25:896"
+  },
+  {
+    "name": "lock",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "security",
+      "secure",
+      "privacy",
+      "protected",
+      "compliance",
+      "locked"
+    ],
+    "figmaId": "25:897"
+  },
+  {
+    "name": "shield",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "security",
+      "protection",
+      "safety",
+      "trust",
+      "defense",
+      "fraud prevention"
+    ],
+    "figmaId": "25:898"
+  },
+  {
+    "name": "verified_user",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "verified",
+      "secure",
+      "trusted",
+      "compliance",
+      "pci",
+      "safe"
+    ],
+    "figmaId": "25:899"
+  },
+  {
+    "name": "language",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "global",
+      "international",
+      "website",
+      "worldwide",
+      "localization",
+      "globe"
+    ],
+    "figmaId": "25:900"
+  },
+  {
+    "name": "web",
+    "category": "Platform & Integrations",
+    "keywords": [
+      "website",
+      "web page",
+      "browser",
+      "site",
+      "layout",
+      "online"
+    ],
+    "figmaId": "25:901"
+  },
+  {
+    "name": "star_shine",
+    "category": "AI & Automation",
+    "keywords": [
+      "ai",
+      "sparkle",
+      "magic",
+      "new",
+      "featured",
+      "highlight"
+    ],
+    "figmaId": "25:902"
+  },
+  {
+    "name": "psychology",
+    "category": "AI & Automation",
+    "keywords": [
+      "intelligence",
+      "thinking",
+      "ai",
+      "insight",
+      "strategy",
+      "mindset"
+    ],
+    "figmaId": "25:903"
+  },
+  {
+    "name": "smart_toy",
+    "category": "AI & Automation",
+    "keywords": [
+      "bot",
+      "ai assistant",
+      "chatbot",
+      "automation",
+      "robot",
+      "agent"
+    ],
+    "figmaId": "25:904"
+  },
+  {
+    "name": "robot_2",
+    "category": "AI & Automation",
+    "keywords": [
+      "robot",
+      "bot",
+      "ai agent",
+      "automation",
+      "assistant",
+      "machine"
+    ],
+    "figmaId": "25:905"
+  },
+  {
+    "name": "neurology",
+    "category": "AI & Automation",
+    "keywords": [
+      "brain",
+      "ai",
+      "machine learning",
+      "intelligence",
+      "smart",
+      "cognitive"
+    ],
+    "figmaId": "25:906"
+  },
+  {
+    "name": "model_training",
+    "category": "AI & Automation",
+    "keywords": [
+      "machine learning",
+      "learning loop",
+      "ai",
+      "optimization",
+      "iteration"
+    ],
+    "figmaId": "25:907"
+  },
+  {
+    "name": "automation",
+    "category": "AI & Automation",
+    "keywords": [
+      "workflow",
+      "triggers",
+      "rules engine",
+      "process",
+      "connected steps"
+    ],
+    "figmaId": "25:908"
+  },
+  {
+    "name": "flowchart",
+    "category": "AI & Automation",
+    "keywords": [
+      "workflow",
+      "process",
+      "logic",
+      "decision tree",
+      "steps"
+    ],
+    "figmaId": "25:909"
+  },
+  {
+    "name": "route",
+    "category": "AI & Automation",
+    "keywords": [
+      "path",
+      "journey",
+      "roadmap",
+      "routing",
+      "a to b"
+    ],
+    "figmaId": "25:910"
+  },
+  {
+    "name": "bolt",
+    "category": "AI & Automation",
+    "keywords": [
+      "fast",
+      "instant",
+      "power",
+      "energy",
+      "quick win",
+      "lightning"
+    ],
+    "figmaId": "25:911"
+  },
+  {
+    "name": "precision_manufacturing",
+    "category": "AI & Automation",
+    "keywords": [
+      "manufacturing",
+      "robotics",
+      "production",
+      "industrial",
+      "automation",
+      "operations"
+    ],
+    "figmaId": "25:912"
+  },
+  {
+    "name": "wand_stars",
+    "category": "AI & Automation",
+    "keywords": [
+      "magic",
+      "ai generated",
+      "personalization",
+      "enhance",
+      "auto-generate",
+      "smart"
+    ],
+    "figmaId": "25:913"
+  },
+  {
+    "name": "batch_prediction",
+    "category": "AI & Automation",
+    "keywords": [
+      "prediction",
+      "forecast",
+      "idea",
+      "ai recommendation",
+      "predictive",
+      "insights"
+    ],
+    "figmaId": "25:914"
+  },
+  {
+    "name": "experiment",
+    "category": "AI & Automation",
+    "keywords": [
+      "test",
+      "a/b test",
+      "lab",
+      "pilot",
+      "innovation"
+    ],
+    "figmaId": "25:915"
+  },
+  {
+    "name": "lightbulb",
+    "category": "AI & Automation",
+    "keywords": [
+      "idea",
+      "insight",
+      "tip",
+      "innovation",
+      "recommendation",
+      "best practice"
+    ],
+    "figmaId": "25:916"
+  },
+  {
+    "name": "schedule",
+    "category": "Time & Planning",
+    "keywords": [
+      "time",
+      "clock",
+      "hours",
+      "timing",
+      "duration"
+    ],
+    "figmaId": "25:917"
+  },
+  {
+    "name": "calendar_today",
+    "category": "Time & Planning",
+    "keywords": [
+      "calendar",
+      "date",
+      "day",
+      "schedule",
+      "appointment",
+      "planning"
+    ],
+    "figmaId": "25:918"
+  },
+  {
+    "name": "event",
+    "category": "Time & Planning",
+    "keywords": [
+      "date",
+      "appointment",
+      "scheduled day",
+      "calendar",
+      "milestone date"
+    ],
+    "figmaId": "25:919"
+  },
+  {
+    "name": "event_available",
+    "category": "Time & Planning",
+    "keywords": [
+      "confirmed date",
+      "booked",
+      "scheduled",
+      "availability",
+      "delivery scheduled",
+      "done"
+    ],
+    "figmaId": "25:920"
+  },
+  {
+    "name": "date_range",
+    "category": "Time & Planning",
+    "keywords": [
+      "period",
+      "timeframe",
+      "quarter",
+      "calendar",
+      "dates"
+    ],
+    "figmaId": "25:921"
+  },
+  {
+    "name": "timer",
+    "category": "Time & Planning",
+    "keywords": [
+      "countdown",
+      "time to value",
+      "stopwatch",
+      "speed",
+      "deadline"
+    ],
+    "figmaId": "25:922"
+  },
+  {
+    "name": "pending_actions",
+    "category": "Time & Planning",
+    "keywords": [
+      "pending",
+      "to do",
+      "awaiting",
+      "in progress",
+      "backlog",
+      "tasks"
+    ],
+    "figmaId": "25:923"
+  },
+  {
+    "name": "checklist",
+    "category": "Time & Planning",
+    "keywords": [
+      "tasks",
+      "requirements",
+      "steps",
+      "to-do list",
+      "criteria"
+    ],
+    "figmaId": "25:924"
+  },
+  {
+    "name": "task_alt",
+    "category": "Time & Planning",
+    "keywords": [
+      "done",
+      "complete",
+      "success",
+      "check",
+      "achieved",
+      "task"
+    ],
+    "figmaId": "25:925"
+  },
+  {
+    "name": "assignment",
+    "category": "Time & Planning",
+    "keywords": [
+      "task",
+      "brief",
+      "clipboard",
+      "plan",
+      "document"
+    ],
+    "figmaId": "25:926"
+  },
+  {
+    "name": "flag",
+    "category": "Time & Planning",
+    "keywords": [
+      "milestone",
+      "goal",
+      "finish",
+      "marker",
+      "report"
+    ],
+    "figmaId": "25:927"
+  },
+  {
+    "name": "map",
+    "category": "Time & Planning",
+    "keywords": [
+      "roadmap",
+      "territory",
+      "geography",
+      "plan",
+      "strategy"
+    ],
+    "figmaId": "25:928"
+  },
+  {
+    "name": "timeline",
+    "category": "Time & Planning",
+    "keywords": [
+      "trend",
+      "progress",
+      "journey",
+      "milestones",
+      "line graph"
+    ],
+    "figmaId": "25:929"
+  },
+  {
+    "name": "view_timeline",
+    "category": "Time & Planning",
+    "keywords": [
+      "timeline",
+      "gantt",
+      "roadmap",
+      "phases",
+      "schedule",
+      "project plan"
+    ],
+    "figmaId": "25:930"
+  },
+  {
+    "name": "view_kanban",
+    "category": "Time & Planning",
+    "keywords": [
+      "kanban",
+      "board",
+      "project management",
+      "workflow stages",
+      "columns",
+      "sprint"
+    ],
+    "figmaId": "25:931"
+  },
+  {
+    "name": "tour",
+    "category": "Time & Planning",
+    "keywords": [
+      "onboarding",
+      "guide",
+      "walkthrough",
+      "flag",
+      "getting started"
+    ],
+    "figmaId": "25:932"
+  },
+  {
+    "name": "check_circle",
+    "category": "Status & Comparison",
+    "keywords": [
+      "success",
+      "complete",
+      "approved",
+      "yes",
+      "included",
+      "done"
+    ],
+    "figmaId": "25:933"
+  },
+  {
+    "name": "cancel",
+    "category": "Status & Comparison",
+    "keywords": [
+      "cancellation",
+      "no",
+      "rejected",
+      "not included",
+      "stop"
+    ],
+    "figmaId": "25:934"
+  },
+  {
+    "name": "check",
+    "category": "Status & Comparison",
+    "keywords": [
+      "yes",
+      "included",
+      "correct",
+      "done",
+      "feature included",
+      "tick"
+    ],
+    "figmaId": "25:935"
+  },
+  {
+    "name": "close",
+    "category": "Status & Comparison",
+    "keywords": [
+      "no",
+      "x",
+      "not included",
+      "remove",
+      "wrong"
+    ],
+    "figmaId": "25:936"
+  },
+  {
+    "name": "error",
+    "category": "Status & Comparison",
+    "keywords": [
+      "alert",
+      "issue",
+      "problem",
+      "attention",
+      "failed"
+    ],
+    "figmaId": "25:937"
+  },
+  {
+    "name": "warning",
+    "category": "Status & Comparison",
+    "keywords": [
+      "risk",
+      "caution",
+      "alert",
+      "issue",
+      "danger"
+    ],
+    "figmaId": "25:938"
+  },
+  {
+    "name": "info",
+    "category": "Status & Comparison",
+    "keywords": [
+      "information",
+      "note",
+      "details",
+      "about",
+      "tip"
+    ],
+    "figmaId": "25:939"
+  },
+  {
+    "name": "help",
+    "category": "Status & Comparison",
+    "keywords": [
+      "question",
+      "faq",
+      "support",
+      "unknown",
+      "ask"
+    ],
+    "figmaId": "25:940"
+  },
+  {
+    "name": "block",
+    "category": "Status & Comparison",
+    "keywords": [
+      "blocked",
+      "not allowed",
+      "prohibited",
+      "ban",
+      "stop",
+      "restricted"
+    ],
+    "figmaId": "25:941"
+  },
+  {
+    "name": "thumb_down",
+    "category": "Status & Comparison",
+    "keywords": [
+      "dislike",
+      "negative",
+      "disapprove",
+      "bad",
+      "no",
+      "pain point"
+    ],
+    "figmaId": "25:942"
+  },
+  {
+    "name": "compare_arrows",
+    "category": "Status & Comparison",
+    "keywords": [
+      "compare",
+      "versus",
+      "exchange",
+      "trade-off",
+      "two-way",
+      "side by side"
+    ],
+    "figmaId": "25:943"
+  },
+  {
+    "name": "compare",
+    "category": "Status & Comparison",
+    "keywords": [
+      "before and after",
+      "contrast",
+      "side by side",
+      "a/b",
+      "versus"
+    ],
+    "figmaId": "25:944"
+  },
+  {
+    "name": "balance",
+    "category": "Status & Comparison",
+    "keywords": [
+      "fairness",
+      "legal",
+      "compliance",
+      "weigh",
+      "trade-off",
+      "scales"
+    ],
+    "figmaId": "25:945"
+  },
+  {
+    "name": "rule",
+    "category": "Status & Comparison",
+    "keywords": [
+      "rules",
+      "pass fail",
+      "criteria",
+      "compliance",
+      "do and don't",
+      "validation"
+    ],
+    "figmaId": "25:946"
+  },
+  {
+    "name": "verified",
+    "category": "Status & Comparison",
+    "keywords": [
+      "certified",
+      "approved",
+      "guaranteed",
+      "trusted",
+      "quality"
+    ],
+    "figmaId": "25:947"
+  },
+  {
+    "name": "priority_high",
+    "category": "Status & Comparison",
+    "keywords": [
+      "important",
+      "priority",
+      "urgent",
+      "attention",
+      "exclamation",
+      "critical"
+    ],
+    "figmaId": "25:948"
+  },
+  {
+    "name": "pending",
+    "category": "Status & Comparison",
+    "keywords": [
+      "in progress",
+      "waiting",
+      "loading",
+      "more",
+      "processing"
+    ],
+    "figmaId": "25:949"
+  },
+  {
+    "name": "visibility",
+    "category": "Status & Comparison",
+    "keywords": [
+      "view",
+      "see",
+      "insight",
+      "transparency",
+      "preview"
+    ],
+    "figmaId": "25:950"
+  },
+  {
+    "name": "arrow_forward",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "next",
+      "forward",
+      "arrow right",
+      "proceed",
+      "continue",
+      "go"
+    ],
+    "figmaId": "25:951"
+  },
+  {
+    "name": "arrow_back",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "back",
+      "previous",
+      "arrow left",
+      "return",
+      "before",
+      "go back"
+    ],
+    "figmaId": "25:952"
+  },
+  {
+    "name": "arrow_upward",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "up",
+      "increase",
+      "rise",
+      "arrow up",
+      "improve",
+      "higher"
+    ],
+    "figmaId": "25:953"
+  },
+  {
+    "name": "arrow_downward",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "down",
+      "decrease",
+      "drop",
+      "arrow down",
+      "lower",
+      "reduce"
+    ],
+    "figmaId": "25:954"
+  },
+  {
+    "name": "north_east",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "up and to the right",
+      "growth",
+      "increase",
+      "external",
+      "diagonal arrow",
+      "upward trend"
+    ],
+    "figmaId": "25:955"
+  },
+  {
+    "name": "south_east",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "down",
+      "decline",
+      "diagonal arrow",
+      "decrease",
+      "lower right",
+      "drop"
+    ],
+    "figmaId": "25:956"
+  },
+  {
+    "name": "arrow_right_alt",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "next step",
+      "then",
+      "leads to",
+      "arrow",
+      "flow",
+      "process step"
+    ],
+    "figmaId": "25:957"
+  },
+  {
+    "name": "chevron_right",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "chevron",
+      "next",
+      "more",
+      "expand",
+      "step",
+      "proceed"
+    ],
+    "figmaId": "25:958"
+  },
+  {
+    "name": "arrow_circle_right",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "next",
+      "go",
+      "continue",
+      "call to action",
+      "proceed",
+      "start"
+    ],
+    "figmaId": "25:959"
+  },
+  {
+    "name": "open_in_new",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "external link",
+      "open",
+      "learn more",
+      "new window",
+      "link out",
+      "visit"
+    ],
+    "figmaId": "25:960"
+  },
+  {
+    "name": "sync_alt",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "sync",
+      "two-way",
+      "exchange",
+      "back and forth",
+      "integration",
+      "bidirectional"
+    ],
+    "figmaId": "25:961"
+  },
+  {
+    "name": "add",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "plus",
+      "more",
+      "new",
+      "include",
+      "increase"
+    ],
+    "figmaId": "25:962"
+  },
+  {
+    "name": "remove",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "minus",
+      "less",
+      "subtract",
+      "decrease",
+      "reduce"
+    ],
+    "figmaId": "25:963"
+  },
+  {
+    "name": "circle",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "dot",
+      "bullet",
+      "empty",
+      "ring",
+      "placeholder"
+    ],
+    "figmaId": "25:964"
+  },
+  {
+    "name": "keep",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "pin",
+      "pinned",
+      "important",
+      "sticky",
+      "highlight"
+    ],
+    "figmaId": "25:965"
+  },
+  {
+    "name": "counter_1",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "one",
+      "first",
+      "step one",
+      "number 1",
+      "first step",
+      "rank 1"
+    ],
+    "figmaId": "25:966"
+  },
+  {
+    "name": "counter_2",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "two",
+      "second",
+      "step two",
+      "number 2",
+      "second step",
+      "rank 2"
+    ],
+    "figmaId": "25:967"
+  },
+  {
+    "name": "counter_3",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "three",
+      "third",
+      "step three",
+      "number 3",
+      "third step",
+      "rank 3"
+    ],
+    "figmaId": "25:968"
+  },
+  {
+    "name": "counter_4",
+    "category": "Arrows & Markers",
+    "keywords": [
+      "four",
+      "fourth",
+      "step four",
+      "number 4",
+      "fourth step",
+      "rank 4"
+    ],
+    "figmaId": "25:969"
+  },
+  {
+    "name": "mail",
+    "category": "Messaging & Engagement",
+    "keywords": [
+      "email",
+      "inbox",
+      "newsletter",
+      "message",
+      "email campaign"
+    ],
+    "figmaId": "25:970"
+  },
+  {
+    "name": "sms",
+    "category": "Messaging & Engagement",
+    "keywords": [
+      "text message",
+      "messaging",
+      "mobile",
+      "notification",
+      "chat"
+    ],
+    "figmaId": "25:971"
+  },
+  {
+    "name": "chat",
+    "category": "Messaging & Engagement",
+    "keywords": [
+      "message",
+      "conversation",
+      "comment",
+      "live chat",
+      "support chat"
+    ],
+    "figmaId": "25:972"
+  },
+  {
+    "name": "forum",
+    "category": "Messaging & Engagement",
+    "keywords": [
+      "conversations",
+      "discussion",
+      "community",
+      "dialogue",
+      "messages"
+    ],
+    "figmaId": "25:973"
+  },
+  {
+    "name": "notifications",
+    "category": "Messaging & Engagement",
+    "keywords": [
+      "notification",
+      "alert",
+      "reminder",
+      "bell",
+      "push notification",
+      "upcoming order reminder"
+    ],
+    "figmaId": "25:974"
+  },
+  {
+    "name": "notifications_active",
+    "category": "Messaging & Engagement",
+    "keywords": [
+      "active alert",
+      "ringing",
+      "reminder",
+      "push notification",
+      "urgent alert",
+      "notify"
+    ],
+    "figmaId": "25:975"
+  },
+  {
+    "name": "campaign",
+    "category": "Messaging & Engagement",
+    "keywords": [
+      "marketing",
+      "announcement",
+      "promotion",
+      "megaphone",
+      "broadcast"
+    ],
+    "figmaId": "25:976"
+  },
+  {
+    "name": "send",
+    "category": "Messaging & Engagement",
+    "keywords": [
+      "submit",
+      "deliver",
+      "outreach",
+      "message sent",
+      "dispatch"
+    ],
+    "figmaId": "25:977"
+  },
+  {
+    "name": "share",
+    "category": "Messaging & Engagement",
+    "keywords": [
+      "social",
+      "referral",
+      "spread",
+      "network",
+      "distribute"
+    ],
+    "figmaId": "25:978"
+  },
+  {
+    "name": "feedback",
+    "category": "Messaging & Engagement",
+    "keywords": [
+      "report issue",
+      "alert message",
+      "comment",
+      "complaint",
+      "voice of customer"
+    ],
+    "figmaId": "25:979"
+  },
+  {
+    "name": "rate_review",
+    "category": "Messaging & Engagement",
+    "keywords": [
+      "write review",
+      "rating",
+      "feedback",
+      "testimonial",
+      "edit comment",
+      "review request"
+    ],
+    "figmaId": "25:980"
+  },
+  {
+    "name": "mark_email_read",
+    "category": "Messaging & Engagement",
+    "keywords": [
+      "email opened",
+      "read",
+      "delivered",
+      "confirmed email",
+      "open rate",
+      "email success"
+    ],
+    "figmaId": "25:981"
+  },
+  {
+    "name": "call",
+    "category": "Messaging & Engagement",
+    "keywords": [
+      "phone",
+      "contact",
+      "sales call",
+      "support line",
+      "telephone"
+    ],
+    "figmaId": "25:982"
+  },
+  {
+    "name": "contact_support",
+    "category": "Messaging & Engagement",
+    "keywords": [
+      "support",
+      "help",
+      "question",
+      "contact us",
+      "faq",
+      "assistance"
+    ],
+    "figmaId": "25:983"
+  },
+  {
+    "name": "touch_app",
+    "category": "Messaging & Engagement",
+    "keywords": [
+      "tap",
+      "click",
+      "interaction",
+      "mobile",
+      "engagement",
+      "touch"
+    ],
+    "figmaId": "25:984"
+  },
+  {
+    "name": "description",
+    "category": "Documents & Content",
+    "keywords": [
+      "document",
+      "file",
+      "report",
+      "page",
+      "doc",
+      "paper"
+    ],
+    "figmaId": "25:985"
+  },
+  {
+    "name": "article",
+    "category": "Documents & Content",
+    "keywords": [
+      "content",
+      "blog",
+      "text",
+      "document",
+      "page"
+    ],
+    "figmaId": "25:986"
+  },
+  {
+    "name": "newspaper",
+    "category": "Documents & Content",
+    "keywords": [
+      "news",
+      "press",
+      "newsletter",
+      "media",
+      "publication",
+      "announcement"
+    ],
+    "figmaId": "25:987"
+  },
+  {
+    "name": "format_list_numbered",
+    "category": "Documents & Content",
+    "keywords": [
+      "numbered list",
+      "steps",
+      "ordered list",
+      "ranking",
+      "agenda",
+      "sequence"
+    ],
+    "figmaId": "25:988"
+  },
+  {
+    "name": "summarize",
+    "category": "Documents & Content",
+    "keywords": [
+      "summary",
+      "overview",
+      "notes",
+      "key points",
+      "brief",
+      "recap"
+    ],
+    "figmaId": "25:989"
+  },
+  {
+    "name": "edit_note",
+    "category": "Documents & Content",
+    "keywords": [
+      "notes",
+      "edit",
+      "write",
+      "draft",
+      "note taking",
+      "edit text"
+    ],
+    "figmaId": "25:990"
+  },
+  {
+    "name": "format_quote",
+    "category": "Documents & Content",
+    "keywords": [
+      "quote",
+      "testimonial",
+      "customer quote",
+      "citation",
+      "saying",
+      "voice of customer"
+    ],
+    "figmaId": "25:991"
+  },
+  {
+    "name": "image",
+    "category": "Documents & Content",
+    "keywords": [
+      "photo",
+      "picture",
+      "visual",
+      "gallery",
+      "media"
+    ],
+    "figmaId": "25:992"
+  },
+  {
+    "name": "slideshow",
+    "category": "Documents & Content",
+    "keywords": [
+      "slides",
+      "presentation",
+      "video",
+      "play",
+      "deck",
+      "media"
+    ],
+    "figmaId": "25:993"
+  },
+  {
+    "name": "co_present",
+    "category": "Documents & Content",
+    "keywords": [
+      "presentation",
+      "presenter",
+      "webinar",
+      "training",
+      "speaker",
+      "demo"
+    ],
+    "figmaId": "25:994"
+  }
+]
