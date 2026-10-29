@@ -11,7 +11,9 @@
 //                             A grid of same-size cards is judged by its fullest card.
 //   TIGHT                     content within 0.05 in of the card's top or bottom edge
 //   OVERFLOW                  text runs past the card's edge
-//   FOOTER                    text within 0.35 in of the footer bar
+//   FOOTER                    text or a table within 0.35 in of the footer bar
+//   OVERLAP                   text that runs into other text: a 2-line title over its subhead, a wrapped cover title
+//                             over its subtitle, a note over a block (added 2026-10-29; these passed every other check)
 // A flag is a prompt to look, not an automatic fail: a design can bunch content on purpose. Compare with
 // the recipe's Figma render before changing anything. Expected flags on the recipe samples (Figma's own
 // spacing): the Case study's stat band, Team B's role lines (0.29 in above Footer Bar 3), and Three-stat
@@ -91,6 +93,11 @@ function parseSlide(xml) {
     const box = boxOf(body);
     if (!box) continue;
     const it = { z: z++, kind, box, name: (body.match(/<p:cNvPr id="\d+" name="([^"]*)"/) || [])[1] || kind };
+    it.rotated = /<a:xfrm[^>]*\brot="(?!0")-?\d+"/.test(body); // rotated text (a chart's axis title) isn't measured for OVERLAP
+    if (kind === "graphicFrame") { // a table: its real height is the sum of its rows
+      const rows = [...body.matchAll(/<a:tr h="(\d+)"/g)].map(r => Number(r[1]) / EMU);
+      if (rows.length) it.tableBottom = box.y + rows.reduce((a, b) => a + b, 0);
+    }
     if (kind === "sp") {
       const spPr = (body.match(/<p:spPr>([\s\S]*?)<\/p:spPr>/) || [])[1] || "";
       const fill = spPr.match(/^(?:(?!<a:ln)[\s\S])*?<a:solidFill><a:srgbClr val="([0-9A-F]{6})"\s*(?:\/>|>([\s\S]*?)<\/a:srgbClr>)/);
@@ -150,12 +157,25 @@ function check(items) {
     if (m.botPad - m.topPad > 0.45 && m.botPad > 2 * m.topPad) flags.push(`EMPTY BOTTOM  ${where(m.c)}${label}: ${pads(m)}`);
     else if (m.topPad - m.botPad > 0.45 && m.topPad > 2 * m.botPad) flags.push(`EMPTY TOP     ${where(m.c)}${label}: ${pads(m)}`);
   }
-  // Text within 0.35 in of the footer bar
+  // Text and tables within 0.35 in of the footer bar
   if (footerTop) {
     for (const it of items) {
+      if (it.tableBottom && it.tableBottom > footerTop - 0.35 + 0.01)
+        flags.push(`FOOTER        ${it.name}: the table ends ${(footerTop - it.tableBottom).toFixed(2)} in above the footer bar (needs 0.35)`);
       if (!it.text || it.box.y >= footerTop - 0.01) continue;
       if (it.text.bottom > footerTop - 0.35 + 0.01)
         flags.push(`FOOTER        ${it.name}: text ends ${(footerTop - it.text.bottom).toFixed(2)} in above the footer bar (needs 0.35)`);
+    }
+  }
+  // Text running into other text. Each text's extent is measured (lines × line pitch, the words' own width on one
+  // line), so a box that's too short for its text shows up even though the boxes themselves don't touch.
+  const texts = items.filter(it => it.text && !it.rotated && it !== footer && it.box.y < (footerTop || SLIDE_H) - 0.01);
+  const tol = 0.03;
+  for (let i = 0; i < texts.length; i++) {
+    for (let j = i + 1; j < texts.length; j++) {
+      const a = texts[i].text, b = texts[j].text;
+      const dx = Math.min(a.right, b.right) - Math.max(a.left, b.left), dy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+      if (dx > tol && dy > tol) flags.push(`OVERLAP       ${texts[i].name} and ${texts[j].name}: their text overlaps by ${dy.toFixed(2)} in`);
     }
   }
   return flags;

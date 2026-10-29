@@ -17,7 +17,7 @@ The design source is the Figma file "Slide Skill 2.0". The recipes, assets and c
 4. **Set up** (first run only):
    - Check the packages: `node -e "require('pptxgenjs'); require('@resvg/resvg-js')"`. If that fails, run `npm install` in the skill folder. If the skill folder is read-only, run `npm install --prefix <work-dir> pptxgenjs@3.12.0 @resvg/resvg-js@2.6.2` and run your build with `NODE_PATH=<work-dir>/node_modules`.
    - Run `bash scripts/install-fonts.sh`. This installs Figtree for the QA render only; it does not put the font in the user's PowerPoint.
-5. **Build the deck** with a script that requires `scripts/build.js` (brand constants, asset paths, helpers) and pastes the recipes. Start it with `newPresentation({ title, audience })`, where audience is `"internal"` or `"external"` ([Footer by audience](#non-negotiables)). Edit the recipe content; don't rewrite the scaffolding. Each recipe adds one slide.
+5. **Build the deck** with a script that requires `scripts/build.js` (brand constants, asset paths, helpers) and pastes the recipes. Start it with `newPresentation({ title, audience })`, where audience is `"internal"` or `"external"` ([Footer by audience](#non-negotiables)). Edit the recipe content; don't rewrite the scaffolding. Each recipe adds one slide. Read the build's console output: a recipe that had to fall back or can't fit the user's content says so there, and those lines go into the hand-off.
 6. **QA visually** before you hand it off. See [QA](#qa-required).
 7. **Save** the .pptx as `OG-<topic>-<YYYY-MM-DD>.pptx` in the folder the user chose. In claude.ai, that is `/mnt/user-data/outputs/`.
 8. **Hand off** with the lines in [What to tell the user](#what-to-tell-the-user).
@@ -29,8 +29,8 @@ If the user gives you an existing deck to put on brand, follow [Rebuilding an ex
 When the user hands you a deck (theirs, a customer's, an old Ordergroove one) and asks for it on brand, rebuild it from the recipes. Don't restyle the old file.
 
 1. **Extract.** Unzip the .pptx into a work folder (or use python-pptx). Pull each slide's text in reading order, copy the images out of `ppt/media/`, and render the source with the [QA](#qa-required) commands so you can see every slide.
-2. **Inventory.** List each source slide's blocks: title, body, stats, chart data, table, logos, images, quotes. This list is your check that all the content made it.
-3. **One source slide in, one slide out, in the same order.** Pick the recipe that holds the slide's content. A slide with a main block and a dark panel beside it (a chart + questions, a timeline + asks, features + metrics, terms + a quote) is Content + dark side panel (recipe 28). Never split a slide into several, and never move content between slides.
+2. **Inventory.** List each source slide's blocks: title (with its line breaks), body, stats, chart data, table, logos, images, quotes, and source / methodology lines. This list is your check that all the content made it.
+3. **One source slide in, one slide out, in the same order.** Pick the recipe that holds the slide's content. A slide with a main block and a dark panel beside it (a chart + questions, a timeline + asks, features + metrics, a table + metrics, terms + a quote) is Content + dark side panel (recipe 28). A table of any length is Table (recipe 17), or recipe 28's table main block next to a panel. Never split a slide into several, and never move content between slides.
 4. **If no single recipe holds a slide's content,** build that one slide from the skill's parts (recipe blocks, `addCard`, logo cards, `addStatStrip`, `sectionLabel()`, the footer), following the source slide's own arrangement. Measure the user's text with `textWidth` / `wrapLines` / `fitFontSize` so it fits the box you give it. For example, a slide with two 3 × 3 logo grids, each with a subhead, plus a 4-stat strip stays one slide. This is the one exception to "don't invent layouts". Ask the user before splitting a slide, and only if its content truly can't fit at the smallest sizes in the type scale (`brand-constants.md`).
 5. **Reuse the source's images** (customer logos, product shots, mock-ups) as files the user supplied: pass `path:`, with `fit: "contain"` for a cut-out. Prefer a bundled `customerLogo()` over a small copy from the deck.
 6. **Rule breaks baked into images.** Text inside an image follows the same rules as slide text. Crop off a zero-padded label, an off-brand colour or an old logo and redraw it natively (a "1 · Scan" pill, say). If it can't be cropped cleanly, keep the image and flag it.
@@ -57,6 +57,8 @@ These rules are the difference between a slide that looks on-brand and one that 
     Everything else keeps its case and punctuation, including table row labels ("Base Case") and milestone names.
   - A recipe slot the content doesn't fill (title, subhead, label, caption, row label): leave it out, or use a variant without it. Never write words to fill it.
   - Keep a caption or attribution as given: "CEO, $2B+ retailer" stays one line; don't split it into name + role.
+  - Keep the user's line breaks in titles. Cover titles are sized by `fitTitle()` to hold them; if the cover's column can't, the build says so: use a cover with a full-width title (Title / cover (light) A, Title with client logo D / E).
+  - Keep every source, methodology and footnote line, in the recipe's `SOURCE` slot ([Source notes](#non-negotiables)).
   - If the content looks wrong (two numbers disagree, a typo), keep it and flag it in the hand-off.
   - Use only the file the user gave you; don't pull text from other versions.
 - **Font:** Figtree only (Regular, Medium, SemiBold, Bold, ExtraBold). Never Arial, Helvetica, Calibri or Soleil. Soleil is deprecated.
@@ -89,6 +91,8 @@ These rules are the difference between a slide that looks on-brand and one that 
 - **Quote marks:** only where the recipe places one (the gradient quote mark on Testimonial cards). Don't add quote icons to other slides.
 - **Line spacing:** body copy 1.15, headlines 1.1 (or the exact `lineSpacing` the recipe sets).
 - **Aspect ratio:** always `LAYOUT_WIDE` (13.33 × 7.5 in).
+- **Source notes:** every content and data recipe has a `const SOURCE = ""` slot for source, methodology and footnote lines (a string, or one line per item: `["Source: …", "Methodology: …"]`). `addSourceNote()` draws it at the foot of the slide (9.5 pt, Gray-400 on light, White on dark, ending 0.35 in above the footer bar) and returns the bottom the slide's content must end above; the recipes then shorten their cards, plots, panels and rows to clear it. Use the slot: never draw a source line by hand, squeeze it into the footer clearance, or drop it to make room. The exceptions: Card grid F (a note can't be read over the logo wall: use A or D, or speaker notes), title, divider and closing slides, and the people slides. Text is the user's, as given.
+- **Titles that wrap:** a content-slide title may run to 2 lines. Recipes 17 and 28 measure it with `addTitleBlock()`, which moves everything under it down. On the other recipes, if the title wraps, draw it with `addTitleBlock()` and add the `dy` it returns to the body's y positions (or take it out of the body's height); `check-spacing.js` flags a title that runs into its subhead (OVERLAP).
 
 ## Charts: which build to use
 
@@ -106,7 +110,7 @@ All 28 recipes are in `layout-recipes.md`. Pick the one that matches the content
 **Title slides**
 1. Title / cover (dark): glow background, large logo, 2-line title
 2. Title / cover (light): A full gradient + header bar, B white glow
-3. Title with client logo + image: co-branded; A Midnight + image panel, B white, C Midnight
+3. Title with client logo + image: co-branded; A Midnight + image panel, B white, C Midnight; D Midnight / E white glow with no photo and a full-width title (also for long titles or ones with the user's line breaks)
 
 **Structure**
 4. Section divider: A full gradient, B white + product shot, C full-bleed photo statement
@@ -118,7 +122,7 @@ All 28 recipes are in `layout-recipes.md`. Pick the one that matches the content
 8. Stat card + image: dark, headline + gradient stat card + large image
 9. Icon columns: two columns, each with an icon tile, subheader and body
 10. Card grid: 3 across (A logos, D icons on dark, E dark cards + image, F numbered on the logo wall) or 4 × 2 (B light, C dark)
-28. Content + dark side panel: a main block on the left (milestones, cards in labelled groups, option cards + rows, or a bar chart) and a Midnight panel on the right; A label + numbered list, C quote, and label + 1–4 metrics in four styles: B figure first (default), D ledger, E stat cards, F hero card
+28. Content + dark side panel: a main block on the left (milestones, cards in labelled groups, option cards + rows, a bar chart, or a table) and a Midnight panel on the right; A label + numbered list, C quote, and label + 1–4 metrics in four styles: B figure first (default), D ledger, E stat cards, F hero card. Holds a 2-line title, 3 metrics and a source note; a metrics style that can't fit switches to D and says so
 
 **Data**
 11. Three-stat callout: three or four cards with big figures on a highlight sized to each figure
@@ -127,7 +131,7 @@ All 28 recipes are in `layout-recipes.md`. Pick the one that matches the content
 14. Chart (bar): column chart, shapes by default
 15. Chart (line): line chart, shapes by default
 16. Chart (pie / donut): A labels + legend, B centre stat
-17. Table: A up to 4 rows, B 5–6 rows, one highlighted row; number columns right-aligned, spanning cells, optional assumptions strip and footnote
+17. Table: any number of rows and columns (A's 0.86 in rows up to 4, B's 0.64 in from 5, tighter when there are more), highlighted rows at any height; number columns right-aligned, spanning cells, optional assumptions strip and source note
 18. Before / after comparison: A check / cross lists, B two cards
 19. Process timeline: A numbered steps, B / D milestones on an arrow (`NAMES = "heading"` keeps the user's milestone names; current-step ring), C titled periods
 20. Roadmap: Gantt by month
@@ -157,11 +161,12 @@ soffice --headless --convert-to pdf output.pptx
 pdftoppm -jpeg -r 150 output.pdf slide
 ```
 
-`check-spacing.js` measures every card and panel against its content and lists what's off: content bunched at one end (EMPTY BOTTOM / TOP), content touching or running past an edge (TIGHT / OVERFLOW), and text within 0.35 in of the footer bar (FOOTER). Look at each flagged slide in the render and fix it, or confirm it's the recipe's Figma design. On the sample recipes, the Case study's stat band and Team B's role lines (0.29 in above Footer Bar 3) are Figma's own spacing.
+`check-spacing.js` measures every card and panel against its content and lists what's off: content bunched at one end (EMPTY BOTTOM / TOP), content touching or running past an edge (TIGHT / OVERFLOW), text or a table within 0.35 in of the footer bar (FOOTER), and text running into other text, such as a 2-line title over its subhead or a cover title over its subtitle (OVERLAP). Look at each flagged slide in the render and fix it, or confirm it's the recipe's Figma design. On the sample recipes, the Case study's stat band and Team B's role lines (0.29 in above Footer Bar 3) are Figma's own spacing.
 
 Then view every `slide-*.jpg` and check for:
 
-- Text overflowing its box (especially big stats and 3-line titles)
+- Text overflowing its box (especially big stats and 3-line titles), and titles running into the line under them
+- Every source, methodology and footnote line from the user's content is on its slide, in the `SOURCE` note
 - Text running into the background glow (title, divider and closing slides: keep it inside `SAFE.glow`)
 - Elements overlapping, or content within 0.35 in of the footer bar
 - Spacing inside cards and panels: the space above the content matches the space below, repeated items (list rows, metrics, cards) are evenly spaced, and dividers sit centred between items. No empty band at the bottom of a card or panel; spread the items or shorten the box instead.
@@ -184,6 +189,7 @@ At hand-off, tell the user in a line or two:
 - **Charts, PowerPoint build:** "This is a native PowerPoint chart: right-click › Edit Data in PowerPoint to change the numbers. If the deck is opened in Google Slides it becomes a fixed picture, and Keynote won't show it."
 - **If the user asks to edit a shape chart by hand:** moving dots or bars won't move the axis or labels; offer to rebuild the slide with the new numbers.
 - **Placeholders, if any are left:** name the slides with logo, photo or product-shot placeholders and say what file each needs.
+- **Fallbacks, if the build printed any:** a recipe 28 panel that switched to the ledger (D), a cover title that couldn't keep the user's line breaks, or content a recipe warned doesn't fit. Say what happened and what the user can change.
 
 ## Common pushbacks
 

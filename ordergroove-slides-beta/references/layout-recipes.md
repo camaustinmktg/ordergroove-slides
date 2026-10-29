@@ -5,6 +5,8 @@ Each recipe is code you paste into a build script and adapt to the user's conten
 ```text
 C, FONT, FONT_MEDIUM, FONT_SEMI, FONT_EXTRA, W, H, ASSETS, SAFE,
 accentColor, subtitleColor, sectionLabel, addFooter, addFooterText, addLogo,
+contentBottom, addTitleBlock, addSourceNote, fitTitle, addBrandTable,
+addGradientOutline, addGradientPanel,
 customerLogo, addLogoFit, addLogoCard, addCard, addPill, addPlaceholder,
 figmaShadow, addGradientShape, addIcon, addIconTile, tileColor, addSectionTile,
 photoAccent, addPhotoRing,
@@ -28,6 +30,8 @@ addStatStrip, niceAxis, drawLineChart, drawBarChart
     fontFace: FONT, fontSize: 32, bold: true, color: C.midnight, lineSpacing: 35.5, valign: "top", margin: 0,
   });
   ```
+- **Source and methodology notes:** every content and data recipe has `const SOURCE = "";`. Put the user's source, methodology and footnote lines there, as given: a string, or one line per item (`["Source: …", "Methodology: …"]`). `addSourceNote()` draws the note at the foot (9.5 pt, Gray-400; White on dark slides), ending 0.35 in above the footer bar, and returns the y the content must end above, so cards, plots, panels and rows shorten to clear it. Each line of note takes about 0.17 in. Not on Card grid F (it can't be read over the logo wall).
+- **Titles that wrap:** recipes are drawn for a 1-line title. Recipes 17 and 28 measure theirs with `addTitleBlock(s, title, { subhead })`, which returns `top` (where the body starts) and `dy` (how far that is below Figma's 2.014 in). On any other recipe, a title that wraps needs the same: draw it with `addTitleBlock()` and add `dy` to the body's y positions. Cover titles (recipes 1–3) use `fitTitle()`, which keeps the user's own line breaks.
 - **Real copy:** recipes are drawn with Figma's sample text. With the user's text, measure before you place: `textWidth()` (inches, from the bundled Figtree files), `wrapLines()` (how many lines a box needs) and `fitFontSize()` (largest size that fits). Recipes 11, 19 B / D, 21 and 26 already do this.
 - **Icons:** Material Symbols Rounded, `addIcon()` / `addIconTile()`. Pick the name from `references/icon-index.md`. Tile colour follows the section: `addSectionTile(s, icon, x, y, { section, isDark })` (green, pink, teal, Midnight; Solid tiles on dark). See SKILL.md "Icon tile colours by section".
 - **Photo accents:** Team and Org chart have `const ACCENT = null;`. `"cyan"`, `"pink"` or `"green"` (Intense Cyan, Flamingo Pink, Groovy Green) colours the ring around a round headshot (`addPhotoRing`) or Org chart's offset tile (`photoAccent`). `null` keeps Figma's look. See SKILL.md "Photo accents".
@@ -81,7 +85,7 @@ Renumbered in 2.0. v2.1 → 2.0: 1→1, 2→2, 3→3, 4→4, 5→5, 6→6, 7→7
 
 ## Coverage: every Figma slide
 
-All 58 slide frames in Figma's Layouts section (`1:92`) map to a recipe and a variant. Set `const VARIANT` to the letter to build that frame; "—" means the recipe has one layout. `audit/test-recipes.js` reads this table: it builds every row and fails if a row or a variant is missing. "Render vs Figma" is what the LibreOffice render still shows differently (side-by-sides in `audit/renders-2.0/`). Across all slides: titles are sentence case where Figma uses Title Case, and LibreOffice draws Figtree Medium and SemiBold close to Regular.
+All 58 slide frames in Figma's Layouts section (`1:92`) map to a recipe and a variant; two variants (3 D and E, rows marked "—") have no Figma frame yet. Set `const VARIANT` to the letter to build that frame; "—" means the recipe has one layout. `audit/test-recipes.js` reads this table: it builds every row and fails if a row or a variant is missing. "Render vs Figma" is what the LibreOffice render still shows differently (side-by-sides in `audit/renders-2.0/`). Across all slides: titles are sentence case where Figma uses Title Case, and LibreOffice draws Figtree Medium and SemiBold close to Regular.
 
 | # | Figma frame | Node | Recipe | Variant | Render vs Figma |
 |---|---|---|---|---|---|
@@ -89,6 +93,8 @@ All 58 slide frames in Figma's Layouts section (`1:92`) map to a recipe and a va
 | 2 | Title / cover (light) A | `1:104` | 2. Title / cover (light) | A | Matches |
 | 3 | Title / cover (light) B | `1:395` | 2. Title / cover (light) | B | Matches |
 | 4 | Title with client logo + image A | `1:93` | 3. Title with client logo + image | A | Photo panel is a placeholder |
+| — | Title with client logo, no photo D (Midnight) | none yet | 3. Title with client logo + image | D | Added 2026-10-29 from B/C's parts; needs a Figma frame |
+| — | Title with client logo, no photo E (white glow) | none yet | 3. Title with client logo + image | E | Added 2026-10-29 from B/C's parts and Background Glow Light 2; needs a Figma frame |
 | 5 | Title with client logo + image B | `1:217` | 3. Title with client logo + image | B | Product shot is a placeholder |
 | 6 | Title with client logo + image C | `1:242` | 3. Title with client logo + image | C | Product shot is a placeholder; footer line white (Figma's is Midnight on Midnight) |
 | 7 | Section divider A | `1:390` | 4. Section divider | A | Matches |
@@ -152,7 +158,7 @@ All 58 slide frames in Figma's Layouts section (`1:92`) map to a recipe and a va
 
 **Figma:** Title / cover (dark) `58:821`.
 
-Dark mode. Midnight with a blurred green-to-cyan glow on the right (one full-bleed image). The large logo is top left, with a 2-line hero title, a subtitle, and the text-only footer. Keep the title to 2 lines: a third line runs into the subtitle.
+Dark mode. Midnight with a blurred green-to-cyan glow on the right (one full-bleed image). The large logo is top left, with a 2-line hero title, a subtitle, and the text-only footer. The title sits in the glow's text column (`SAFE.glow`, 4.73 in wide), so `fitTitle()` sizes it: 50 pt as designed, smaller only to keep the user's own line breaks or to stay within 3 lines, and the subtitle follows the title's real height. A title whose lines don't fit this column at 36 pt belongs on a wider cover: Title / cover (light) A, or Title with client logo D / E.
 
 ```javascript
 {
@@ -161,13 +167,23 @@ Dark mode. Midnight with a blurred green-to-cyan glow on the right (one full-ble
 
   addLogo(s, true); // large logo, 435×75 px at 97,190
 
-  s.addText("Presentation title goes here", {
-    x: 1.069, y: 2.701, w: 4.729, h: 1.528,
-    fontFace: FONT, fontSize: 50, bold: true, color: C.white,
-    lineSpacing: 55, valign: "top", margin: 0,
+  // The user's words, as given. "\n" is their own line break and is kept when the column allows it.
+  const title = "Presentation title goes here";
+  const subtitle = "Subtitle or date can go here"; // "" to leave it out
+  const col = { x: 1.069, w: 4.729 };               // the glow's text column: right edge 5.8 in (SAFE.glow)
+  const t = fitTitle(title, col.w);                  // 100 px Bold as designed; smaller only to fit
+  if (!t.kept) console.warn("Recipe 1: the title's line breaks don't fit the glow column. Title / cover (light) A or Title with client logo D / E have a full-width title.");
+  const subH = subtitle ? wrapLines(subtitle, col.w, { fontSize: 20 }) * 0.347 : 0;
+  // Figma: title at 389 px, subtitle 0.389 in under it. A taller block moves up (never closer than 0.45 in to the logo)
+  // so it ends by 6.0 in, where the glow reaches into the column.
+  const ty = Math.max(2.29, Math.min(2.701, 6.0 - t.h - (subtitle ? 0.389 + subH : 0)));
+  s.addText(title, {
+    x: col.x, y: ty, w: col.w, h: t.h,
+    fontFace: FONT, fontSize: t.size, bold: true, color: C.white,
+    lineSpacing: t.lineSpacing, valign: "top", margin: 0,
   });
-  s.addText("Subtitle or date can go here", {
-    x: 1.069, y: 4.618, w: 4.729, h: 0.347,
+  if (subtitle) s.addText(subtitle, {
+    x: col.x, y: ty + t.h + 0.389, w: col.w, h: subH,
     fontFace: FONT, fontSize: 20, color: C.white,
     lineSpacing: 25, valign: "top", margin: 0,
   });
@@ -176,13 +192,15 @@ Dark mode. Midnight with a blurred green-to-cyan glow on the right (one full-ble
 }
 ```
 
+- Figma's sample title wraps "Presentation / title goes here" at 50 pt. Real titles keep the user's breaks where the column allows; the build warns when it doesn't.
+
 ---
 
 ## 2. Title / cover (light)
 
 **Figma:** Title / cover (light) A `1:104` (full gradient, Midnight header bar) and B `1:395` (white with the glow on the right).
 
-Light twin of recipe 1: Midnight title and subtitle, text-only footer. **A**: the full-bleed Intense Cyan → Laser Lemon gradient, the logo centred in a Midnight header bar, and a larger title. **B**: the large dark logo top left on the white glow background. B's positions follow `1:395` (logo at 127 px, title at 336 px), which sit higher than the dark title's.
+Light twin of recipe 1: Midnight title and subtitle, text-only footer. **A**: the full-bleed Intense Cyan → Laser Lemon gradient, the logo centred in a Midnight header bar, and a larger title. **B**: the large dark logo top left on the white glow background. B's positions follow `1:395` (logo at 127 px, title at 336 px), which sit higher than the dark title's. Titles are sized by `fitTitle()`, and the subtitle follows the title's real height. A's gradient has no glow to keep clear of, so when the user's line breaks don't fit Figma's 6.13 in column, A widens the title to the right margin before it shrinks it.
 
 ```javascript
 {
@@ -198,13 +216,28 @@ Light twin of recipe 1: Midnight title and subtitle, text-only footer. **A**: th
     addLogo(s, false, { y: 0.882 }); // large logo, 435×75 px at 97,127
   }
 
-  s.addText("Presentation title goes here", {
-    x: isA ? 1.072 : 1.097, y: isA ? 2.263 : 2.333, w: isA ? 6.13 : 4.729, h: isA ? 1.681 : 1.528,
-    fontFace: FONT, fontSize: isA ? 55 : 50, bold: true, color: C.midnight,
-    lineSpacing: isA ? 60.5 : 55, charSpacing: isA ? -0.55 : 0, valign: "top", margin: 0,
-  }); // A: 110 px at 154,326, -1% tracking (without it the title wraps after "Presentation"), box 2% wider than Figma's 6.01" because Google Slides drops the tracking · B: 100 px at 158,336
-  s.addText("Subtitle or date can go here", {
-    x: isA ? 1.069 : 1.097, y: isA ? 4.181 : 4.25, w: 4.729, h: 0.347,
+  // The user's words, as given. "\n" is their own line break and is kept when the column allows it.
+  const title = "Presentation title goes here";
+  const subtitle = "Subtitle or date can go here"; // "" to leave it out
+  // A: 110 px at 154,326, -1% tracking (without it the title wraps after "Presentation"), box 2% wider than Figma's 6.01"
+  // because Google Slides drops the tracking; the full width (to the 0.69 in margin) when the user's lines need it.
+  // B: 100 px at 158,336 in the glow's text column.
+  const fitOpts = isA ? { max: 55, charSpacing: -0.55 } : {};
+  let col = isA ? { x: 1.072, w: 6.13 } : { x: 1.097, w: 4.729 };
+  let t = fitTitle(title, col.w, fitOpts);
+  if (isA && (!t.kept || t.size < 55)) { col = { x: 1.072, w: W - 1.072 - 0.694 }; t = fitTitle(title, col.w, fitOpts); }
+  if (!t.kept) console.warn(`Recipe 2 ${VARIANT}: the title's line breaks don't fit at 36 pt.` + (isA ? "" : " Variant A has a full-width title."));
+  const subW = isA ? col.w : 4.729, subH = subtitle ? wrapLines(subtitle, subW, { fontSize: 20 }) * 0.347 : 0;
+  const gap = isA ? 0.237 : 0.389;                    // subtitle under the title: A 34 px, B 56 px
+  const ty0 = isA ? 2.263 : 2.333, minY = isA ? 1.2 : 1.85, maxBottom = isA ? 6.4 : 6.0; // B: clear of the glow's lower reach
+  const ty = Math.max(minY, Math.min(ty0, maxBottom - t.h - (subtitle ? gap + subH : 0)));
+  s.addText(title, {
+    x: col.x, y: ty, w: col.w, h: t.h,
+    fontFace: FONT, fontSize: t.size, bold: true, color: C.midnight,
+    lineSpacing: t.lineSpacing, charSpacing: isA ? -0.55 * t.size / 55 : 0, valign: "top", margin: 0,
+  });
+  if (subtitle) s.addText(subtitle, {
+    x: isA ? 1.069 : 1.097, y: ty + t.h + gap, w: subW, h: subH,
     fontFace: FONT, fontSize: 20, color: C.midnight,
     lineSpacing: 25, valign: "top", margin: 0,
   });
@@ -214,34 +247,50 @@ Light twin of recipe 1: Midnight title and subtitle, text-only footer. **A**: th
 ```
 
 - A's logo sits in the header bar and the footer is text-only, so the slide still has one logo (DECISIONS §6).
-- Keep the title to 2 lines on both variants.
+- A takes a long title or the user's line breaks across the full width; B keeps the glow's column, so a title that doesn't fit there belongs on A.
 
 ---
 
 ## 3. Title with client logo + image
 
-**Figma:** Title with client logo + image A `1:93` (Midnight, rounded image panel, OLLY), B `1:217` (white, Keurig) and C `1:242` (Midnight, Keurig).
+**Figma:** Title with client logo + image A `1:93` (Midnight, rounded image panel, OLLY), B `1:217` (white, Keurig) and C `1:242` (Midnight, Keurig). D and E (added 2026-10-29) have no Figma frame yet: they're the co-branded cover without a photo, built from the same parts.
 
-Co-branded cover. Ordergroove logo, title and subtitle on the left. On the right, the client's imagery and a white card holding the client's logo, overlapping the image's lower left. **A**: one rounded image panel that runs off the right edge. **B/C**: a gradient block flush with the right edge with a cut-out product shot over it; C's block is the wider Gradient Accent 2. Product shots and lifestyle photos aren't bundled: the recipe draws an image placeholder; pass `path:` to `addPlaceholder` for a real photo (a cut-out PNG works best on B/C). The client logo comes from `assets/logos/` or a file the user supplies.
+Co-branded cover. Ordergroove logo, title and subtitle on the left. On the right, the client's imagery and a white card holding the client's logo, overlapping the image's lower left. **A**: one rounded image panel that runs off the right edge. **B/C**: a gradient block flush with the right edge with a cut-out product shot over it; C's block is the wider Gradient Accent 2. **D / E, no photo:** when there's no client imagery, the Ordergroove logo top left and the client's logo card top right, level with it, and the title across the full width under them; **D** Midnight, **E** white with the glow along the bottom (Background Glow Light 2). D and E are also the cover for a long title or one with the user's own line breaks: their column is 11.5 in wide, against 4.7 in on A–C. Product shots and lifestyle photos aren't bundled: A–C draw an image placeholder; pass `path:` to `addPlaceholder` for a real photo (a cut-out PNG works best on B/C). The client logo comes from `assets/logos/` or a file the user supplies. Titles are sized by `fitTitle()`, and the subtitle follows the title's real height.
 
 ```javascript
 {
-  const VARIANT = "A"; // A: Midnight + image panel (Figma 1:93) · B: white + gradient block (Figma 1:217) · C: Midnight + wide gradient block (Figma 1:242)
-  const isDark = VARIANT !== "B";
+  const VARIANT = "A"; // A: Midnight + image panel (Figma 1:93) · B: white + gradient block (Figma 1:217) · C: Midnight + wide gradient block (Figma 1:242) · D: Midnight, no photo · E: white glow, no photo
+  const isDark = VARIANT !== "B" && VARIANT !== "E";
+  const noPhoto = VARIANT === "D" || VARIANT === "E";
   const s = pres.addSlide();
-  s.background = { color: isDark ? C.midnight : C.white };
+  s.background = VARIANT === "E" ? { path: ASSETS.bgGlowLight2 } : { color: isDark ? C.midnight : C.white }; // E: Background Glow Light 2 (10:711)
 
   addLogo(s, isDark, { y: 0.882 }); // large logo, 435×75 px at 97,127
+  const logo = customerLogo(VARIANT === "A" ? "olly" : "keurig"); // the client's logo: a bundled slug or the user's file
 
-  const tx = VARIANT === "A" ? 1.069 : 1.097;  // A: 154 px · B/C: 158 px
-  const ty = VARIANT === "A" ? 2.264 : 2.333;  // A: 326 px · B/C: 336 px
-  s.addText("Presentation title goes here", {
-    x: tx, y: ty, w: 4.729, h: 1.528,
-    fontFace: FONT, fontSize: 50, bold: true, color: isDark ? C.white : C.midnight,
-    lineSpacing: 55, valign: "top", margin: 0,
+  // The user's words, as given. "\n" is their own line break and is kept when the column allows it.
+  const title = "Presentation title goes here";
+  const subtitle = "Subtitle or date can go here"; // "" to leave it out
+
+  const tx = VARIANT === "A" ? 1.069 : 1.097;  // A: 154 px · B–E: 158 px
+  const ty0 = VARIANT === "A" ? 2.264 : 2.333; // A: 326 px · B–E: 336 px
+  // A–C: Figma's 4.73 in column beside the image; the title ends above the logo card (4.45 in) and the subtitle stops
+  // short of the card. D / E: the full width, to the 0.69 in right margin.
+  const colW = noPhoto ? W - tx - 0.694 : 4.729;
+  const subW = noPhoto ? colW : 5.66 - 0.15 - tx;
+  const t = fitTitle(title, colW);
+  if (!t.kept) console.warn(`Recipe 3 ${VARIANT}: the title's line breaks don't fit at 36 pt.` + (noPhoto ? "" : " Variants D / E have a full-width title."));
+  const subH = subtitle ? wrapLines(subtitle, subW, { fontSize: 20 }) * 0.347 : 0;
+  const ty = noPhoto
+    ? Math.max(1.85, Math.min(ty0, 6.0 - t.h - (subtitle ? 0.389 + subH : 0)))
+    : Math.max(1.85, Math.min(ty0, 4.3 - t.h));
+  s.addText(title, {
+    x: tx, y: ty, w: colW, h: t.h,
+    fontFace: FONT, fontSize: t.size, bold: true, color: isDark ? C.white : C.midnight,
+    lineSpacing: t.lineSpacing, valign: "top", margin: 0,
   });
-  s.addText("Subtitle or date can go here", {
-    x: tx, y: ty + 1.917, w: 4.729, h: 0.347,
+  if (subtitle) s.addText(subtitle, {
+    x: tx, y: ty + t.h + 0.389, w: subW, h: subH,
     fontFace: FONT, fontSize: 20, color: isDark ? C.white : C.midnight,
     lineSpacing: 25, valign: "top", margin: 0,
   });
@@ -249,15 +298,20 @@ Co-branded cover. Ordergroove logo, title and subtitle on the left. On the right
   if (VARIANT === "A") {
     // Image panel: 1150×689 px at 960,182, 39 px corners; it runs off the right edge, so only the left corners show
     addPlaceholder(s, "image", 6.667, 1.264, 6.667, 4.783, { shape: "round", radii: [0.273, 0, 0, 0.273], onDark: true /* , path: photoPath */ });
-  } else {
+  } else if (!noPhoto) {
     // Gradient block, flush right: B Gradient accent 1 (841×729 px) · C Gradient Accent 2 (1211 px wide, its visible 841 px)
     s.addImage({ path: VARIANT === "C" ? ASSETS.gradientAccent2 : ASSETS.gradientAccent1, x: 7.493, y: 1.139, w: 5.84, h: 5.063 });
     addPlaceholder(s, "image", 8.6, 1.6, 4.1, 4.1, { onDark: isDark /* , path: productShotPath, fit: "contain" */ }); // product shot
   }
 
-  // Client logo card: 392×181 px at 815,641 (A solid white; B/C 90% white)
-  addLogoCard(s, customerLogo(VARIANT === "A" ? "olly" : "keurig"), 5.66, 4.451, 2.722, 1.254,
-    { transparency: VARIANT === "A" ? 0 : 10 });
+  if (noPhoto) {
+    // Client logo card top right, centred on the Ordergroove logo's height: Logo Box at 75% (294×136 px), solid white
+    const cw = 2.042, ch = 0.943;
+    addLogoCard(s, logo, W - 0.694 - cw, 0.882 + 0.26 - ch / 2, cw, ch);
+  } else {
+    // Client logo card: 392×181 px at 815,641 (A solid white; B/C 90% white)
+    addLogoCard(s, logo, 5.66, 4.451, 2.722, 1.254, { transparency: VARIANT === "A" ? 0 : 10 });
+  }
 
   addFooterText(s, isDark); // Footer Text White 1 / Dark 1
 }
@@ -265,6 +319,8 @@ Co-branded cover. Ordergroove logo, title and subtitle on the left. On the right
 
 - C's footer line is Midnight on Midnight in Figma (invisible); the recipe draws it white, as on A.
 - A cut-out product shot on B/C needs `fit: "contain"` next to `path:`, so the whole cut-out shows; without it, a tall shot (a phone) loses its top and bottom to the 4.1 × 4.1 in box.
+- **Which co-branded cover:** the client sent a photo or product shot → A (photo) or B / C (cut-out). No imagery, a long title, or a title with the user's own line breaks → D (dark) or E (light). On A–C a title that doesn't fit the column at 36 pt warns and points to D / E.
+- D / E pair the two logos across the top: the Ordergroove logo is the slide's one Ordergroove logo, and the client's sits on its white card, as on every co-branded slide.
 
 ---
 
@@ -379,6 +435,8 @@ Light mode. **A**: a headline, a two-line lead and a pale gradient panel across 
   const VARIANT = "A"; // A: lead + content panel (Figma 1:384) · B: bullets + product shot and logo card (Figma 1:1722)
   const s = pres.addSlide();
   s.background = { color: C.white };
+  const SOURCE = ""; // source / methodology note at the foot: a string, or lines ["Source: …", "Methodology: …"]
+  const bottom = addSourceNote(s, SOURCE, VARIANT === "A" ? {} : { w: 6.5 }); // B: under the bullets, clear of the gradient block
 
   s.addText(VARIANT === "A" ? "One column sample" : "Headline for slide goes here", {
     x: 0.694, y: 0.646, w: VARIANT === "A" ? 11.479 : 6.3, h: 0.493,
@@ -392,9 +450,9 @@ Light mode. **A**: a headline, a two-line lead and a pale gradient panel across 
       fontFace: FONT_MEDIUM, fontSize: 20, color: C.darkIndigo, lineSpacing: 25, charSpacing: -0.2, valign: "top", margin: 0,
     }); // Figma's -1% tracking kept: without it the lead wraps to 3 lines. Box as wide as the panel (Figma 11.778") so Google Slides, which drops the tracking, keeps 2 lines
 
-    // Content Panel Gradient 1: 1719×549 px at 101,343, the gradient at 10%
-    const panel = { x: 0.701, y: 2.382, w: 11.938, h: 3.813 };
-    s.addImage({ path: ASSETS.contentPanelGradient, ...panel });
+    // Content Panel Gradient 1: 1719×549 px at 101,343, the gradient at 10%; shorter only to clear a source note
+    const panel = { x: 0.701, y: 2.382, w: 11.938, h: Math.min(3.813, bottom - 2.382) };
+    addGradientPanel(s, panel.x, panel.y, panel.w, panel.h, { opacity: 0.1 });
     const points = []; // Figma leaves the panel empty. Put 3–5 bullets here, or place a screenshot or diagram inside `panel`.
     if (points.length) {
       s.addText(points.map((t, i) => ({ text: t, options: { bullet: { indent: 16 }, breakLine: i < points.length - 1 } })), {
@@ -445,11 +503,14 @@ A customer quote beside proof. **A**: a white panel on Gray-975 holding a gradie
   const quote = "“There is no one better equipped to handle Dollar Shave Club’s scale, depth, and innovation than Ordergroove. To deliver on our mission, we partnered with the most powerful and flexible subscription platform out there.”";
   const person = { name: "Name", role: "Chief Digital Officer, Company" };
   const logo = customerLogo("dollar-shave-club-midnight"); // client logo, Midnight version (Assets 10:835)
+  const SOURCE = ""; // source / methodology note at the foot (for A's stat, say): a string, or lines ["Source: …", "Methodology: …"]
+  const bottom = addSourceNote(s, SOURCE);
 
   if (VARIANT === "A" || VARIANT === "B") {
-    // Panel: 1658×791 px at 131,94
-    if (VARIANT === "A") addCard(s, 0.91, 0.653, 11.514, 5.493, { fill: C.white, line: null, r: 0.069 });
-    else s.addImage({ path: ASSETS.largeCardGradient, x: 0.91, y: 0.653, w: 11.514, h: 5.493 }); // Large Card Gradient 1
+    // Panel: 1658×791 px at 131,94; shorter only to clear a source note
+    const ph = Math.min(5.493, bottom - 0.653);
+    if (VARIANT === "A") addCard(s, 0.91, 0.653, 11.514, ph, { fill: C.white, line: null, r: 0.069 });
+    else addGradientPanel(s, 0.91, 0.653, 11.514, ph); // Large Card Gradient 1, drawn for the box
 
     // Card on the left: 357×274 px at 237,347
     if (VARIANT === "A") {
@@ -497,9 +558,11 @@ A customer quote beside proof. **A**: a white panel on Gray-975 holding a gradie
       "Hell-bent on driving\nyour growth, profitably.",
       "Unmatched flexibility.\nInfinite possibilities.",
     ];
+    // Cards at 224, 462, 703 px, 200 px tall; shorter and closer only to clear a source note
+    const rh = Math.min(1.389, (bottom - 1.556 - 2 * 0.274) / 3), rp = Math.min(1.663, rh + 0.274);
     reasons.forEach((text, i) => {
-      const y = [1.556, 3.208, 4.882][i];                                    // cards at 224, 462, 703 px
-      addGradientShape(s, "gradientOutlineCard2", 0.81, y, 4.278, 1.389);  // Gradient Outline Card 2: 616×200 px
+      const y = 1.556 + i * rp;
+      addGradientOutline(s, 0.81, y, 4.278, rh, { r: 0.049 });            // Gradient Outline Card 2: 616×200 px, drawn for the card
       s.addText(`${i + 1}.`, { // plain numerals, never 01/02/03
         x: 0.991, y: y + 0.382, w: 0.6, h: 0.333,
         fontFace: FONT_EXTRA, fontSize: 18.5, color: C.midnight, lineSpacing: 24, valign: "top", margin: 0,
@@ -549,11 +612,15 @@ Dark mode on Midnight. A two-line headline and subhead top left, a gradient stat
     fontFace: FONT_MEDIUM, fontSize: 20, color: C.white, lineSpacing: 25, valign: "top", margin: 0,
   });
 
-  // Stat card: Stat Card Gradient 2, 553×286 px at 92,591
-  const card = { x: 0.639, y: 4.104, w: 3.84, h: 1.986 };
+  // Source line under the stat card, centred, White (Figma: "(Optimizely research)"). The user's words; "" for none.
+  const SOURCE = "(Optimizely research)";
+  const noteTop = addSourceNote(s, SOURCE, { bar: 2, isDark: true, x: 1.076, w: 2.972, align: "center", gap: 0.111 });
+  // Stat card: Stat Card Gradient 2, 553×286 px at 92,591; it moves up only for a source note of 2 lines or more
+  const card = { x: 0.639, y: Math.min(4.104, noteTop - 1.986), w: 3.84, h: 1.986 };
+  const oy = card.y - 4.104;
   s.addImage({ path: ASSETS.statCardGradient2, ...card });
   s.addText("Testing averages".toUpperCase(), {
-    x: 1.076, y: 4.319, w: 2.972, h: 0.215,
+    x: 1.076, y: 4.319 + oy, w: 2.972, h: 0.215,
     fontFace: FONT, fontSize: 14, bold: true, color: C.midnight, charSpacing: 0.56, align: "center", valign: "top", margin: 0,
   });
   const stats = [
@@ -562,17 +629,13 @@ Dark mode on Midnight. A two-line headline and subhead top left, a gradient stat
   ];
   stats.forEach(st => {
     s.addText(st.num, {
-      x: st.x, y: 4.875, w: st.w, h: 0.271,
+      x: st.x, y: 4.875 + oy, w: st.w, h: 0.271,
       fontFace: FONT, fontSize: 27.5, bold: true, color: C.midnight, lineSpacing: 19.1, align: "center", valign: "top", margin: 0,
     });
     s.addText(st.label, {
-      x: st.x + (st.w - 1.236) / 2, y: 5.285, w: 1.236, h: 0.472,
+      x: st.x + (st.w - 1.236) / 2, y: 5.285 + oy, w: 1.236, h: 0.472,
       fontFace: FONT_MEDIUM, fontSize: 13, color: C.darkIndigo, lineSpacing: 16.9, align: "center", valign: "top", margin: 0,
     });
-  });
-  s.addText("(Optimizely research)", {
-    x: 1.076, y: 6.201, w: 2.972, h: 0.18,
-    fontFace: FONT_MEDIUM, fontSize: 10, color: C.white, lineSpacing: 13, align: "center", valign: "top", margin: 0,
   });
 
   // Image, right: Figma's photo spans 845–1920 px wide and the full height above the footer
@@ -607,6 +670,9 @@ Light mode. Headline, a two-line lead, then two columns: tinted icon tile, subhe
     x: 0.701, y: 1.278, w: 11.938, h: 0.694,
     fontFace: FONT_MEDIUM, fontSize: 20, color: C.darkIndigo, lineSpacing: 25, charSpacing: -0.2, margin: 0, valign: "top",
   }); // Figma's -1% tracking kept here: without it the lead wraps to 3 lines. Box 1.5% wider than Figma's 11.764" so Google Slides, which drops the tracking, keeps 2 lines
+
+  const SOURCE = ""; // source / methodology note at the foot: a string, or lines ["Source: …", "Methodology: …"]
+  addSourceNote(s, SOURCE); // the columns end at 4.75 in, clear of it
 
   // Each column is a section (Figma 1:324: Icon Tile, Tinted): column 1 takes the deck's 1st section colour
   // (green), column 2 the 2nd (pink). If these sections appear elsewhere in the deck, pass their numbers.
@@ -672,6 +738,9 @@ Six Figma slides in two layouts. **3 across** (518×600 px cards spanning the co
       { fill: C.midnight, line: C.groovyGreen, lineW: 2, color: C.white, fontSize: 12 });
   }
 
+  const SOURCE = ""; // source / methodology note at the foot: a string, or lines; the cards shorten to clear it. Not on F (below)
+  if (VARIANT === "F" && SOURCE) console.warn("Recipe 10 F: a note can't be read over the logo wall. Use A or D, or put the source in the speaker notes.");
+  const bottom = VARIANT === "F" ? contentBottom(2) : addSourceNote(s, SOURCE, { isDark });
   const cw = 3.597, gap = 0.576, x0 = 0.694;      // 518px cards across 100–1820px
   const cy = VARIANT === "F" ? 1.778 : 1.875;     // 256px / 270px
 
@@ -694,7 +763,9 @@ Six Figma slides in two layouts. **3 across** (518×600 px cards spanning the co
   // A and D cards fit their text: the space under the text matches the space above the logo / icon (47 / 55px).
   // All three share the tallest card's height. E and F keep Figma's heights.
   const topPad = VARIANT === "A" ? 0.326 : 0.382;
-  const ch = VARIANT === "F" ? 3.368 : VARIANT === "E" ? 4.167 : Math.min(4.167, 1.076 + Math.max(...AD_TEXT.map(textH)) + topPad);
+  const ch = Math.min(bottom - cy, VARIANT === "F" ? 3.368 : VARIANT === "E" ? 4.167 : Math.min(4.167, 1.076 + Math.max(...AD_TEXT.map(textH)) + topPad));
+  if ((VARIANT === "A" || VARIANT === "D") && 1.076 + Math.max(...AD_TEXT.map(textH)) + topPad > ch + 0.01)
+    console.warn(`Recipe 10 ${VARIANT}: the card text runs past the cards. Ask the user before cutting it (SKILL.md).`);
 
   const D_OUTLINES = [C.groovyGreen, C.piercingPitaya, C.intenseCyan];
   // Each card is a section (Figma 1:427: Icon Tile, Tinted): sections 1–3 are green, pink, teal. The tiles sit on
@@ -746,7 +817,7 @@ Six Figma slides in two layouts. **3 across** (518×600 px cards spanning the co
         x: x + 0.375, y: cy + 0.639, w: 3.236, h: 0.55,
         fontFace: FONT, fontSize: 20.5, bold: true, color: C.white, lineSpacing: 19, margin: 0, valign: "top",
       });
-      addPlaceholder(s, "image", x + 0.194, cy + 1.708, cw - 0.389, 2.292, { onDark: true }); // illustration or UI shot
+      addPlaceholder(s, "image", x + 0.194, cy + 1.708, cw - 0.389, ch - 1.875, { onDark: true }); // illustration or UI shot
     }
 
     if (VARIANT === "F") {
@@ -791,7 +862,9 @@ Six Figma slides in two layouts. **3 across** (518×600 px cards spanning the co
     head: "At-risk payment banner",
     body: "Catch subscribers before they're lost to payment issues with gentle on-site alerts the moment they return.",
   }));
-  const cw = 2.826, ch = 1.979;                 // 407×285px
+  const SOURCE = ""; // source / methodology note at the foot: a string, or lines; the cards shorten to clear it
+  const bottom = addSourceNote(s, SOURCE, { isDark });
+  const cw = 2.826, ch = Math.min(1.979, (bottom - 1.743 - 0.264) / 2); // 407×285px; shorter only for a note
   const gapX = 0.213, gapY = 0.264;             // 4 cards span 100–1820px; rows 38px apart
   const x0 = 0.694, y0 = 1.743;                 // 100,251px
 
@@ -847,7 +920,9 @@ Light mode (Gray-975). Three (or four) white cards, each with a large figure on 
     { num: "XX%", head: "Subhead goes here", body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
   ];
   const n = stats.length;                              // 3 or 4
-  const ch = 4.167, cy = 1.876;                       // 600 px tall cards at y 270
+  const SOURCE = ""; // source / methodology note under the cards: a string, or lines; the cards shorten to clear it
+  const bottom = addSourceNote(s, SOURCE);
+  const cy = 1.876, ch = Math.min(4.167, bottom - cy); // 600 px tall cards at y 270, shorter only for a note
   const gap = n === 3 ? 0.578 : 0.4;
   const cw = n === 3 ? 3.599 : (11.933 - gap * 3) / 4; // 518 px as designed; 4 across the same 100–1818 px
   const pad = 0.34, inner = cw - 2 * pad;
@@ -867,7 +942,7 @@ Light mode (Gray-975). Three (or four) white cards, each with a large figure on 
       fontFace: FONT, fontSize: 12, bold: true, color: C.midnight, lineSpacing: 15, charSpacing: 0.36, valign: "top", margin: 0,
     });
     if (st.body) s.addText(st.body, {
-      x: x + 0.361, y: st.head ? 4.33 : 3.95, w: cw - 0.82, h: 1.25,
+      x: x + 0.361, y: st.head ? 4.33 : 3.95, w: cw - 0.82, h: Math.min(1.25, cy + ch - 0.2 - (st.head ? 4.33 : 3.95)),
       fontFace: FONT, fontSize: 12, color: C.darkIndigo, lineSpacing: 15.6, charSpacing: -0.12, valign: "top", margin: 0,
     });
   });
@@ -902,6 +977,9 @@ Light mode. Headline, a two-line lead, then three columns: a Green figure (a num
     x: 0.701, y: 1.278, w: 11.875, h: 0.694,
     fontFace: FONT_MEDIUM, fontSize: 20, color: C.darkIndigo, lineSpacing: 25, charSpacing: -0.2, valign: "top", margin: 0,
   });
+
+  const SOURCE = ""; // source / methodology note at the foot: a string, or lines ["Source: …", "Methodology: …"]
+  addSourceNote(s, SOURCE); // the columns end at 4.94 in, clear of it
 
   const cols = [
     { num: "1", head: "Subheader placeholder", body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
@@ -945,23 +1023,26 @@ One huge figure with a one-line quote under it, on a large card. **A**: cyan →
   const s = pres.addSlide();
   s.background = { color: C.white };
 
-  const x = 0.91, y = 0.653, w = 11.514, h = 5.493; // 1658×791px card at 131,94px
+  const SOURCE = ""; // source / methodology note under the card: a string, or lines; the card shortens to clear it
+  const bottom = addSourceNote(s, SOURCE);
+  const x = 0.91, y = 0.653, w = 11.514, h = Math.min(5.493, bottom - 0.653); // 1658×791px card at 131,94px
   if (isDark) addCard(s, x, y, w, h, { fill: C.midnight, line: null, r: 0.069 });
-  else s.addImage({ path: ASSETS.largeCardGradient, x, y, w, h }); // Large Card Gradient 1 (aspect-locked)
+  else addGradientPanel(s, x, y, w, h); // Large Card Gradient 1, drawn for the box
+  const oy = (h - 5.493) / 2;                                // a shorter card keeps its content centred
 
   s.addText(isDark ? "$40,000,000" : "$25 billion", {
-    x, y: 2.438, w, h: 1.389,
+    x, y: 2.438 + oy, w, h: 1.389,
     fontFace: FONT, fontSize: 80, bold: true, color: isDark ? C.groovyGreen : C.midnight,
     align: "center", valign: "middle", margin: 0,
   });
   if (isDark) {
     s.addText("December 2023".toUpperCase(), {
-      x, y: 4.285, w, h: 0.208,
+      x, y: 4.285 + oy, w, h: 0.208,
       fontFace: FONT, fontSize: 12, bold: true, color: C.groovyGreen, charSpacing: 0.36, align: "center", margin: 0,
     });
   }
   s.addText("“We are aiming to exit 2024 with repeatable $3M quarters.”", {
-    x: 1.514, y: isDark ? 4.674 : 4.188, w: 10.313, h: 0.347,
+    x: 1.514, y: (isDark ? 4.674 : 4.188) + oy, w: 10.313, h: 0.347,
     fontFace: FONT_MEDIUM, fontSize: 20, color: isDark ? C.white : C.darkIndigo, align: "center", valign: "top", margin: 0,
   });
 
@@ -1020,6 +1101,8 @@ Light mode, laid out exactly like Chart (line): title and subhead top left, supp
     { name: "Key Item", values: [33, 57, 103] },
   ];
   const colors = C.chart.slice(0, series.length);
+  const SOURCE = ""; // source / methodology note under the chart: a string, or lines ["Source: …", "Methodology: …"]
+  const bottom = addSourceNote(s, SOURCE); // the plot shortens to clear it (category labels sit 0.34 in under the plot)
 
   // Legend, top right: 22 px swatch + label, 37 px apart
   series.forEach((sr, i) => {
@@ -1037,14 +1120,14 @@ Light mode, laid out exactly like Chart (line): title and subhead top left, supp
   if (!POWERPOINT) {
     // Plot area = Figma's gridlines, 1095–1814 × 316–862 px. Labels and axis title sit outside it.
     drawBarChart(s, {
-      x: 7.604, y: 2.194, w: 4.993, h: 3.792,
+      x: 7.604, y: 2.194, w: 4.993, h: Math.min(3.792, bottom - 0.34 - 2.194),
       labels, series, colors, max, step,
       format: v => `$${v}`, axisTitle: "ARR ($MM)",
     });
   } else {
     // Same chart box and plot-area layout as Chart (line)'s PowerPoint build.
     s.addChart(pres.charts.BAR, series.map(sr => ({ name: sr.name, labels, values: sr.values })), {
-      x: 6.597, y: 2.014, w: 6.181, h: 4.41,
+      x: 6.597, y: 2.014, w: 6.181, h: Math.min(4.41, bottom - 2.014),
       layout: { x: 0.1629, y: 0.0409, w: 0.8079, h: 0.8598 },
       barDir: "col", barGapWidthPct: 110,
       chartColors: colors,
@@ -1118,6 +1201,8 @@ Light mode, laid out like Chart (bar). Title and subhead top left, supporting po
     { name: "Key Item", values: [15, 19, 26, 31, 37, 45] },
   ];
   const colors = C.chart.slice(0, series.length);
+  const SOURCE = ""; // source / methodology note under the chart: a string, or lines ["Source: …", "Methodology: …"]
+  const bottom = addSourceNote(s, SOURCE); // the plot shortens to clear it (category labels sit 0.34 in under the plot)
 
   // Legend, top right: 22 px swatch + label, 37 px apart
   series.forEach((sr, i) => {
@@ -1135,7 +1220,7 @@ Light mode, laid out like Chart (bar). Title and subhead top left, supporting po
   if (!POWERPOINT) {
     // Plot area = Figma's gridlines, 1095–1814 × 316–862 px. Labels and axis title sit outside it.
     drawLineChart(s, {
-      x: 7.604, y: 2.194, w: 4.993, h: 3.792,
+      x: 7.604, y: 2.194, w: 4.993, h: Math.min(3.792, bottom - 0.34 - 2.194),
       labels, series, colors, max, step,
       format: v => `$${v}`, axisTitle: "ARR ($MM)",
     });
@@ -1143,7 +1228,7 @@ Light mode, laid out like Chart (bar). Title and subhead top left, supporting po
     // Chart box 950,290 → 1840,925 px holds the axis labels and axis title.
     // layout = the plot area, matched to Figma's gridlines (1095–1814 × 316–862 px).
     s.addChart(pres.charts.LINE, series.map(sr => ({ name: sr.name, labels, values: sr.values })), {
-      x: 6.597, y: 2.014, w: 6.181, h: 4.41,
+      x: 6.597, y: 2.014, w: 6.181, h: Math.min(4.41, bottom - 2.014),
       layout: { x: 0.1629, y: 0.0409, w: 0.8079, h: 0.8598 },
       chartColors: colors,
       lineSize: 2.5, lineDataSymbol: "circle", lineDataSymbolSize: 9,
@@ -1197,8 +1282,10 @@ Light mode. A donut ring built from native arc shapes, one per slice (inner radi
   const colors = C.chart.slice(0, slices.length);
   const startAng = VARIANT === "A" ? 30 : 90; // first slice starts here (degrees clockwise from 12 o'clock), as in Figma
 
-  // Ring: 630px at 645,225; inner radius 75% of outer
-  const d = 4.375, cx = 4.479 + d / 2, cy = 1.563 + d / 2;
+  const SOURCE = ""; // source / methodology note under the chart: a string, or lines ["Source: …", "Methodology: …"]
+  const bottom = addSourceNote(s, SOURCE);
+  // Ring: 630px at 645,225; inner radius 75% of outer. Smaller only to clear a source note (A's labels reach 0.4 in below the ring)
+  const d = Math.min(4.375, bottom - 1.563 - (VARIANT === "A" ? 0.4 : 0)), cx = 6.667, cy = 1.563 + d / 2;
   // One native arc shape per slice, clockwise from startAng. Not a chart object:
   // to change values, rebuild the slide (tell the user, see above).
   const norm = a => ((a % 360) + 360) % 360;
@@ -1241,15 +1328,15 @@ Light mode. A donut ring built from native arc shapes, one per slice (inner radi
   } else {
     // Centre stat: 1:1349's first donut scaled ×2.21 (285px → 630px ring)
     s.addText(`${Math.round(slices[0].value / total * 100)}%`, {
-      x: cx - 1.4, y: 2.93, w: 2.8, h: 0.8,
+      x: cx - 1.4, y: cy - 0.82, w: 2.8, h: 0.8,
       fontFace: FONT, fontSize: 50, bold: true, color: C.midnight, align: "center", valign: "top", margin: 0,
     });
     s.addText("Subhead goes here".toUpperCase(), {
-      x: cx - 1.4, y: 3.76, w: 2.8, h: 0.21,
+      x: cx - 1.4, y: cy + 0.01, w: 2.8, h: 0.21,
       fontFace: FONT, fontSize: 12, bold: true, color: C.midnight, charSpacing: 0.36, align: "center", margin: 0,
     });
     s.addText("One short supporting sentence, two lines at most.", {
-      x: cx - 1.15, y: 4.14, w: 2.3, h: 0.5,
+      x: cx - 1.15, y: cy + 0.39, w: 2.3, h: 0.5,
       fontFace: FONT, fontSize: 10, color: C.midnight, lineSpacing: 13, align: "center", valign: "top", margin: 0,
     });
   }
@@ -1280,38 +1367,35 @@ Light mode. A donut ring built from native arc shapes, one per slice (inner radi
 
 **Figma:** Table A `1:923`, B `1:860`.
 
-Light mode. A native PowerPoint table: Midnight rule under the header row, Gray-950 shading on even rows, and one highlighted row on a gradient outline. **A**: up to 4 rows, 0.86 in tall. **B**: 5–6 rows, 0.64 in tall. The row count picks the row height and the outline image. Columns of numbers are right-aligned (header too); a cell that spans columns is left-aligned. Optional: an assumptions strip above the table and a footnote under it.
+Light mode. A native PowerPoint table: Midnight rule under the header row, Gray-950 shading on every other row, and highlighted rows in Bold on a gradient outline. It takes any number of rows and columns: rows keep Figma's height (**A**: 0.86 in, up to 4 rows; **B**: 0.64 in, from 5 rows) while there's room, and share the room evenly when there isn't. A row whose text wraps gets the height it needs, and the text steps down from 12 pt only when the rows wouldn't fit their text. The highlight is drawn for the row's own height (`addGradientOutline`), so any row can take it. Columns of numbers are right-aligned (header too); a cell that spans columns is left-aligned. Optional: an assumptions strip above the table and a source / methodology note under it. The table is drawn by `addBrandTable()` (build.js), which recipe 28's table main block uses too.
 
 ```javascript
 {
-  const VARIANT = "A"; // A: up to 4 rows (Figma 1:923) · B: 5–6 rows (Figma 1:860)
+  const VARIANT = "A"; // A: 4 sample rows (Figma 1:923) · B: 6 sample rows (Figma 1:860). Any row count works; the rows set the height
   const s = pres.addSlide();
   s.background = { color: C.white };
 
-  s.addText("Sample table", {
-    x: 0.69, y: 0.65, w: 11.48, h: 0.55,
-    fontFace: FONT, fontSize: 32, bold: true, color: C.midnight, margin: 0, valign: "top",
-  });
-  s.addText("Subhead", {
-    x: 0.7, y: 1.28, w: 5.86, h: 0.35,
-    fontFace: FONT_MEDIUM, fontSize: 20, color: C.darkIndigo, margin: 0, valign: "top",
-  });
+  // All text is the user's, as given. "" leaves a slot out.
+  const title = "Sample table";
+  const subhead = "Subhead";
+  const SOURCE = ""; // source / methodology note under the table: a string, or lines ["Source: …", "Methodology: …"]
 
-  // Cells are the user's text, as given (header case included). A cell can be { text, colspan: 4 } to span columns.
+  // Cells as given (header case included). A cell can be { text, colspan: 4 } to span columns.
   const header = ["", "Title 1", "Title 2", "Title 3", "Title 4"];
   const body = Array.from({ length: VARIANT === "A" ? 4 : 6 }, (_, i) =>
     [`Row ${i + 1} title`, "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum"]);
-  const highlight = VARIANT === "A" ? 3 : 1; // index into body; -1 for no highlighted row
+  const highlight = VARIANT === "A" ? 3 : 1; // index into body; [1, 4] for several rows; -1 for none
   // Optional assumptions strip above the table: { label: "Base case assumptions", items: ["…", "…"] }.
   // An item can be text runs, to keep the user's bold figures: [{ text: "12.4", options: { bold: true } }, { text: " checkouts / day" }]
   const assumptions = null;
-  const footnote = "";                        // optional line under the table, as given
 
-  const x = 0.694;                                   // 100px
-  let y = 2.014;                                     // 290px
+  const { top } = addTitleBlock(s, title, { subhead });  // measured: a 2-line title or subhead moves the table down
+  const bottom = addSourceNote(s, SOURCE, { bar: 3 });   // the table ends above the note (or 0.35 in above the footer)
+  const x = 0.694, w = 11.944;                           // 100 px, 1720 px wide
+  let y = top;                                           // 290 px under a 1-line title and subhead
   if (assumptions) { // Gray-950 band: caps label, then the items in equal columns
-    const bh = 0.6, lw = 1.35, iw = (11.944 - lw - 0.3) / assumptions.items.length;
-    addCard(s, x, y, 11.944, bh, { fill: C.gray950, line: C.gray800, lineW: 1, r: 0.104 });
+    const bh = 0.6, lw = 1.35, iw = (w - lw - 0.3) / assumptions.items.length;
+    addCard(s, x, y, w, bh, { fill: C.gray950, line: C.gray800, lineW: 1, r: 0.104 });
     s.addText(assumptions.label.toUpperCase(), { x: x + 0.2, y, w: lw - 0.2, h: bh, fontFace: FONT, fontSize: 9.5, bold: true, color: C.midnight, charSpacing: 0.28, valign: "middle", margin: 0 });
     assumptions.items.forEach((it, i) => s.addText(it, {
       x: x + lw + 0.1 + i * iw, y, w: iw - 0.15, h: bh,
@@ -1319,66 +1403,15 @@ Light mode. A native PowerPoint table: Midnight rule under the header row, Gray-
     }));
     y += bh + 0.25;
   }
-  const colW = [2.41, 2.384, 2.384, 2.384, 2.384];   // 347px label column + 4 × 343px = 1720px
-  const headH = 0.472;                               // 68px
-  const rowH = body.length <= 4 ? 0.861 : 0.639;     // 124px or 92px
-
-  // Number columns (every filled body cell a figure: "97K", "$2.4M", "3.5%", "1 in 41") are right-aligned.
-  const cellText = c => (c && typeof c === "object" ? c.text : c) ?? "";
-  const isNum = t => /^[~≈+\-−]?[$€£]?\d[\d.,]*\s*(%|[KMB]|x|\+|bn|m|k)?$/i.test(String(t).trim());
-  const numCol = header.map((_, ci) => ci > 0 && body.every(r => r.length !== header.length || cellText(r[ci]) === "" || isNum(cellText(r[ci]))));
-
-  // Gradient outline behind the highlighted row. Image (incl. its shadow), aspect-locked:
-  // one asset per row height. The outline is 1781px wide, centred on the 1720px table.
-  if (highlight >= 0) {
-    const tall = rowH > 0.7;
-    const outH = tall ? 0.847 : 0.736;               // 122px / 106px outline
-    let oy = y + headH + highlight * rowH + (rowH - outH) / 2;
-    if (highlight === 0) oy = Math.max(oy, y + headH + 0.04); // first row: keep the outline off the header rule
-    s.addImage({
-      path: tall ? ASSETS.tableHighlightRow1 : ASSETS.tableHighlightRow2, // Table Highlight Row 1 / 2
-      x: x - 0.379, y: oy - 0.069, w: 12.701, h: outH + 0.333,           // + shadow: 24px sides, 10px top, 38px bottom
-    });
-  }
-
-  const NONE = { type: "none" };
-  const headRow = header.map((text, ci) => ({ text, options: {
-    fontFace: FONT_SEMI, color: C.midnight, align: ci === 0 ? "left" : numCol[ci] ? "right" : "center",
-    border: [NONE, NONE, { pt: 1.5, color: C.midnight }, NONE],
-  } }));
-  const bodyRows = body.map((row, ri) => {
-    let ci = 0;
-    return row.map(cell => {
-      const hi = ri === highlight, span = typeof cell === "object" && cell ? cell.colspan || 1 : 1;
-      const col = ci; ci += span;
-      return { text: cellText(cell), options: {
-        ...(span > 1 ? { colspan: span } : {}),
-        fontFace: hi ? FONT : (col === 0 ? FONT_SEMI : FONT),
-        bold: hi,
-        color: hi ? C.midnight : C.darkIndigo,
-        align: col === 0 || span > 1 ? "left" : numCol[col] ? "right" : "center",
-        // Shade even rows; odd rows and the highlight stay unfilled so the outline's shadow shows
-        fill: !hi && ri % 2 === 1 ? { color: C.gray950 } : undefined,
-        border: [NONE, NONE, NONE, NONE],
-      } };
-    });
-  });
-
-  s.addTable([headRow, ...bodyRows], {
-    x, y, w: 11.944, colW, rowH: [headH, ...body.map(() => rowH)],
-    fontFace: FONT, fontSize: 12, valign: "middle", margin: [0, 0.104, 0, 0.104],
-  });
-  if (footnote) s.addText(footnote, {
-    x: x + 0.104, y: y + headH + body.length * rowH + 0.15, w: 11.7, h: 0.22,
-    fontFace: FONT, fontSize: 10, color: C.soft, valign: "top", margin: 0,
-  });
+  addBrandTable(s, { x, y, w, bottom, header, body, highlight });
 
   addFooter(s, { bar: 3 }); // Footer Bar 3
 }
 ```
 
-- Five columns as designed (label + 4). For fewer columns, keep the 2.41 in label column and share the remaining 9.534 in equally.
-- Up to 3 rows with an assumptions strip and a footnote in A; B's 6 rows leave no room for the strip.
+- **Rows:** any number. With a 1-line title and subhead and no note, about 13 rows fit at 9.5 pt; each line of source note or assumptions strip takes room from the rows. If the rows don't fit even at 9.5 pt, `addBrandTable` warns: ask the user before cutting or splitting (SKILL.md). Never drop rows to make it fit.
+- **Highlight:** any row, or several (`highlight: [1, 4]`), at any row height. Don't swap in a plain green outline: the gradient outline is the brand's highlight.
+- **Columns:** any number. The label column keeps Figma's share (2.41 of 11.944 in) and widens for a long label, up to 40%; the other columns share the rest. Pass `colW` to set them yourself.
 - A column counts as numbers when every filled body cell in it is a figure; rows with a spanning cell don't count. Spanning cells are left-aligned so a long sentence reads normally.
 - The strip label is set in caps (it's a section label); every item stays as given.
 - `1:923`'s header reads "Title 1, Title 1, Title 2, Title 3"; the recipe numbers them 1–4.
@@ -1396,6 +1429,8 @@ Light mode. A native PowerPoint table: Midnight rule under the header row, Gray-
   const VARIANT = "A"; // A: check / cross lists (Figma 1:797) · B: two cards (Figma 1:1173)
   const s = pres.addSlide();
   s.background = { color: VARIANT === "A" ? C.white : C.gray975 };
+  const SOURCE = ""; // source / methodology note at the foot: a string, or lines ["Source: …", "Methodology: …"]
+  const bottom = addSourceNote(s, SOURCE, { bar: VARIANT === "A" ? 3 : 1 });
 
   if (VARIANT === "A") {
     s.addText("Sample comparison slide", {
@@ -1416,7 +1451,8 @@ Light mode. A native PowerPoint table: Midnight rule under the header row, Gray-
     ];
     const highlight = 2;                          // row index on the gradient outline; -1 for none
     const colX = [0.692, 6.946], colW = 5.693;    // columns at 100 and 1000 px, 820 px wide
-    const rowTop = 2.479, rowH = 0.833;           // 120 px rows from 357 px
+    const rowTop = 2.479, rowH = Math.min(0.833, (bottom - rowTop) / rows.length); // 120 px rows from 357 px; tighter for 5 rows or a note
+    if (rowH < 0.5) console.warn("Recipe 18 A: the rows are too tight for 2-line text. Ask the user before cutting rows (SKILL.md).");
 
     heads.forEach((h, c) => s.addText(h, {
       x: [0.847, 7.174][c], y: 2.028, w: 5.0, h: 0.264,
@@ -1429,7 +1465,7 @@ Light mode. A native PowerPoint table: Midnight rule under the header row, Gray-
       x, y: rowTop + (i + 1) * rowH - 0.003, w: colW, h: 0, line: { color: C.gray800, width: 1 },
     })));
     // Highlighted row: Gradient Outline Card 1 (846×122 px), over the rules
-    if (highlight >= 0) addGradientShape(s, "gradientOutlineCard1", 0.604, rowTop + highlight * rowH - 0.02, 5.875, 0.847);
+    if (highlight >= 0) addGradientOutline(s, 0.604, rowTop + highlight * rowH - 0.02, 5.875, rowH + 0.014, { r: 0.076 }); // Gradient Outline Card 1 (846×122 px at 120 px rows), drawn for the row
 
     rows.forEach((pair, i) => {
       const cy = rowTop + i * rowH + rowH / 2;
@@ -1447,28 +1483,31 @@ Light mode. A native PowerPoint table: Midnight rule under the header row, Gray-
       x: 0.694, y: 0.646, w: 11.479, h: 0.493,
       fontFace: FONT, fontSize: 32, bold: true, color: C.midnight, lineSpacing: 35.5, valign: "top", margin: 0,
     });
+    // A source note lifts the cards and labels (up to 0.3 in, into the space under the title), then shortens the cards
+    const lift = Math.max(0, 6.396 - bottom), up = Math.min(lift, 0.3), cut = lift - up;
+    const cy = 1.757 - up, ch = 3.417 - cut;
     // Before: plain card, 654×492 px at 104,253, with a screenshot inside
-    addCard(s, 0.722, 1.757, 4.542, 3.417, { fill: C.white, line: C.gray800, lineW: 1, r: 0.222, shadow: figmaShadow(80.6, 32.2, 0.2, C.midnight) }); // Figma: 0,32 blur 81, #0A0922 at 45%; 20% looks the same in slides
-    addPlaceholder(s, "image", 1.111, 2.146, 3.118, 2.319, { shape: "round", r: 0.08 /* , path: screenshotPath */ });
+    addCard(s, 0.722, cy, 4.542, ch, { fill: C.white, line: C.gray800, lineW: 1, r: 0.222, shadow: figmaShadow(80.6, 32.2, 0.2, C.midnight) }); // Figma: 0,32 blur 81, #0A0922 at 45%; 20% looks the same in slides
+    addPlaceholder(s, "image", 1.111, cy + 0.389, 3.118, 2.319 - cut, { shape: "round", r: 0.08 /* , path: screenshotPath */ });
     // After: Gradient Outline Card 3, 959×492 px at 857,253, with an illustration inside
-    addGradientShape(s, "gradientOutlineCard3", 5.951, 1.757, 6.66, 3.417);
-    addPlaceholder(s, "image", 6.389, 2.014, 5.972, 3.083 /* , { path: illustrationPath } */);
-    addIcon(s, "add", 5.373, 3.205, 0.319, C.midnight); // Icon Plus 1: 27 px at 797,485
+    addGradientOutline(s, 5.951, cy, 6.66, ch, { r: 0.201 }); // drawn for the card, so it can shorten
+    addPlaceholder(s, "image", 6.389, cy + 0.257, 5.972, 3.083 - cut /* , { path: illustrationPath } */);
+    addIcon(s, "add", 5.373, cy + ch / 2 - 0.16, 0.319, C.midnight); // Icon Plus 1: 27 px at 797,485
 
     // Labels: a grey pill over the before card, the Ordergroove logo over the after card
-    addPill(s, "eCommerce Platform", 2.313, 5.306, 1.361, 0.243, { fill: C.gray800, color: C.midnight, fontSize: 7.7, bold: true });
-    addLogo(s, false, { x: 8.576, y: 5.326, w: 1.41 }); // 203 px wide at 1235,767
+    addPill(s, "eCommerce Platform", 2.313, 5.306 - lift, 1.361, 0.243, { fill: C.gray800, color: C.midnight, fontSize: 7.7, bold: true });
+    addLogo(s, false, { x: 8.576, y: 5.326 - lift, w: 1.41 }); // 203 px wide at 1235,767
     const cols = [
       { head: "Traditional commerce", sub: "One-and-dones via shopping carts.", x: 1.354, w: 3.285 },
       { head: "Relationship commerce", sub: "Frictionless experiences. Seamlessly integrated.", x: 6.917, w: 4.736 },
     ];
     cols.forEach(c => {
       s.addText(c.head, {
-        x: c.x, y: 5.632, w: c.w, h: 0.389,
+        x: c.x, y: 5.632 - lift, w: c.w, h: 0.389,
         fontFace: FONT, fontSize: 22, bold: true, color: C.midnight, lineSpacing: 28, align: "center", valign: "top", margin: 0,
       });
       s.addText(c.sub, {
-        x: c.x - 0.6, y: 6.063, w: c.w + 1.2, h: 0.333,
+        x: c.x - 0.6, y: 6.063 - lift, w: c.w + 1.2, h: 0.333,
         fontFace: FONT, fontSize: 12, color: C.midnight, lineSpacing: 24, align: "center", valign: "top", margin: 0,
       });
     });
@@ -1496,6 +1535,8 @@ Light mode, white. **A**: 3–5 numbered steps on a Groovy Green line, each with
 
   const title = { x: 0.692, y: 0.649, w: 11.479, h: 0.493, fontFace: FONT, fontSize: 32, bold: true, color: C.midnight, lineSpacing: 35.5, valign: "top", margin: 0 };
   const subhead = { x: 0.703, y: 1.281, w: 5.861, h: 0.347, fontFace: FONT_MEDIUM, fontSize: 20, color: C.darkIndigo, lineSpacing: 25, valign: "top", margin: 0 };
+  const SOURCE = ""; // source / methodology note at the foot: a string, or lines ["Source: …", "Methodology: …"]
+  const bottom = addSourceNote(s, SOURCE, { bar: VARIANT === "A" ? 1 : 3 }); // A and C end well above it; B / D's lower notes stop at it
 
   if (VARIANT === "A") {
     s.addText("3 columns headline for slide goes here", { ...title, x: 0.694, y: 0.646 });
@@ -1555,8 +1596,10 @@ Light mode, white. **A**: 3–5 numbered steps on a Groovy Green line, each with
       // Block 30 px right of the stem. Figma's text box is 247 px (1.715 in); real copy may run to 3.4 in, which still clears
       // the stem two milestones on (blocks alternate above and below). The last block stops at the 12.64 in margin.
       const bx = cx + 0.2, bw = Math.min(3.4, 12.64 - bx);
-      const noteLines = Math.min(4, wrapLines(ev.note, bw, noteFont));
       const headH = NAMES === "pill" ? 0.181 : 0.24 * Math.min(2, wrapLines(ev.name + (ev.flag ? "  " + ev.flag : ""), bw, { fontSize: 13, bold: true }));
+      const maxLines = up ? 4 : Math.min(4, Math.floor((bottom - 5.167 - headH - 0.104) / lineH + 1e-6)); // below: clear of the note / footer
+      const wantLines = wrapLines(ev.note, bw, noteFont), noteLines = Math.min(wantLines, maxLines);
+      if (wantLines > maxLines) console.warn(`Recipe 19 ${VARIANT}: the note for "${ev.date}" needs ${wantLines} lines and ${maxLines} fit. Ask the user before cutting it (SKILL.md).`);
       const blockH = headH + 0.104 + noteLines * lineH;
       // Above: Figma's top (306 px), raised for a long note so it ends clear of the dates (3.15 in).
       // Below: Figma's top (744 px); a 4-line note still ends 0.35 in above Footer Bar 3.
@@ -1675,8 +1718,14 @@ Light mode Gantt. Month columns between hairlines, a coloured bar per project an
 
   const gx = 3.34, gw = 8.944, colW = gw / months.length; // grid 481–1769px
   const gridTop = 2.076, rowsTop = 2.417;                 // 299px, 348px
-  const rowH = 0.5, gap = 0.146, barH = 0.201, barDy = 0.035;
+  const SOURCE = ""; // source / methodology note under the roadmap: a string, or lines; the rows tighten to clear it
+  const bottom = addSourceNote(s, SOURCE);
+  const gap = 0.146, barH = 0.201, barDy = 0.035;
   const rowCount = projects.reduce((n, p) => n + 1 + p.tasks.length, 0);
+  // 72 px rows as designed; tighter (down to 0.36 in, room for a 2-line task) when there are more rows or a note
+  const rowH = Math.max(0.36, Math.min(0.5, (bottom - rowsTop - (projects.length - 1) * gap) / rowCount));
+  if (rowsTop + rowCount * rowH + (projects.length - 1) * gap > bottom + 1e-6)
+    console.warn("Recipe 20: the roadmap runs past the footer clearance. Split it across two slides (in a deck you're rebuilding, ask the user first).");
   const gridBottom = rowsTop + rowCount * rowH + (projects.length - 1) * gap - 0.01;
 
   months.forEach((m, i) => s.addText(m.toUpperCase(), {
@@ -1842,13 +1891,19 @@ Light mode. Left: the client's logo beside its name, a one-line summary, then Ch
     { label: "Solution", y: 4.48, h: 1.5,
       body: "After deciding to make the switch to a new tech stack that would reduce costs and allow them to innovate faster, Dollar Shave Club thoroughly looked at the options and determined Ordergroove the only option that could handle their scale. What sealed the deal was Ordergroove's roadmap and potential to grow Dollar Shave Club in the future. After migrating, they've redeployed resources and improved their speed to market." },
   ];
-  blocks.forEach(b => {
+  const SOURCE = ""; // source / methodology note under Solution (left column): a string, or lines ["Source: …", "Methodology: …"]
+  const bottom = addSourceNote(s, SOURCE, { w: 6.395 });
+  blocks.forEach((b, i) => {
+    // Room for the text: down to the next label (0.1 in clear), or for Solution down to the note / footer clearance
+    const room = (i < blocks.length - 1 ? blocks[i + 1].y - 0.1 : bottom) - (b.y + 0.313);
+    const bh = Math.min(b.h, room);
+    if (wrapLines(b.body, 6.395, { fontSize: 13 }) * 18.2 / 72 > room + 0.01) console.warn(`Recipe 22: the ${b.label} text runs past its space. Ask the user before cutting it (SKILL.md).`);
     s.addText(b.label.toUpperCase(), {
       x: 0.694, y: b.y, w: 3.0, h: 0.194,
       fontFace: FONT, fontSize: 11, bold: true, color: C.midnight, lineSpacing: 13.75, charSpacing: 0.33, valign: "top", margin: 0,
     });
     s.addText(b.body, {
-      x: 0.694, y: b.y + 0.313, w: 6.395, h: b.h,
+      x: 0.694, y: b.y + 0.313, w: 6.395, h: bh,
       fontFace: FONT, fontSize: 13, color: C.midnight, lineSpacing: 18.2, charSpacing: -0.13, valign: "top", margin: 0,
     }); // 1.9% wider than Figma's 6.276" so Google Slides, which drops the tracking, keeps Figma's line breaks (6.385–6.40" keeps them everywhere)
   });
@@ -1934,8 +1989,10 @@ Light mode. Title and subhead, then a grid of customer logos on native white car
 
   // Grid area 100,300 → 1820,900 px; 40 px gaps (20 px with two groups). A strip takes the bottom 1.2 in (+ its label).
   const areaX = 0.694, areaW = 11.944, top = 2.083;
-  const stripH = 0.85, stripTop = 6.4 - stripH - (stripLabel ? 0.36 : 0);
-  const bottom = strip ? stripTop - 0.3 : 6.25;
+  const SOURCE = ""; // source / methodology note at the foot (for the strip's figures, say): a string, or lines
+  const limit = addSourceNote(s, SOURCE);
+  const stripH = 0.85, stripTop = limit - stripH - (stripLabel ? 0.36 : 0);
+  const bottom = strip ? stripTop - 0.3 : Math.min(6.25, limit);
   const two = groups.length === 2, gGap = 0.5, gap = two ? 0.139 : 0.278;
   const gW = two ? (areaW - gGap) / 2 : areaW;
 
@@ -2194,34 +2251,26 @@ Dark mode, no contact details. The left-aligned twin of Title / cover (dark): sa
 
 **Figma:** Content + dark side panel A `123:949`, B `124:965`, C `125:1019`, D `156:1212`, E `156:1288`, F `156:1371` (designed 2026-10-20, approved by Cameron; B's metrics redesigned and D–F added the same day).
 
-Light mode, white. Title and subhead, a main block on the left two-thirds and a Midnight panel on the right third. The panel holds the slide's second message. **A**: a label and a numbered list of up to 6 items. **B, D, E, F**: a label and 1–4 metrics (figure, name, caption), in four styles: **B** figure first (White figure on a Gradient Highlight, name beside it, caption under; the default), **D** ledger (name and caption left, Groovy Green figure right, dividers), **E** stat cards (Dark Indigo cards with an icon tile), **F** hero (the first metric on a gradient card, the rest as compact rows). **C**: a customer quote and its attribution. The main block is chosen separately with `MAIN`: `"milestones"` (A's default), `"cards"` (the metrics variants' default, with optional labelled groups), `"options"` (C's: option cards + rows) or `"chart"` (a bar chart on a card). Any variant takes any main block, so a dense source slide with a dark panel stays one slide. Footer Bar 1.
+Light mode, white. Title and subhead, a main block on the left two-thirds and a Midnight panel on the right third. The panel holds the slide's second message. **A**: a label and a numbered list of up to 6 items. **B, D, E, F**: a label and 1–4 metrics (figure, name, caption), in four styles: **B** figure first (White figure on a Gradient Highlight, name beside it, caption under; the default), **D** ledger (name and caption left, Groovy Green figure right, dividers), **E** stat cards (Dark Indigo cards with an icon tile), **F** hero (the first metric on a gradient card, the rest as compact rows). **C**: a customer quote and its attribution. The main block is chosen separately with `MAIN`: `"milestones"` (A's default), `"cards"` (the metrics variants' default, with optional labelled groups), `"options"` (C's: option cards + rows), `"chart"` (a bar chart on a card) or `"table"` (a brand table, any number of rows). Any variant takes any main block, so a dense source slide with a dark panel stays one slide. A source / methodology note (`SOURCE`) runs under both blocks. Footer Bar 1.
 
 ```javascript
 {
   const VARIANT = "A"; // A: label + numbered list (Figma 123:949) · B: metrics, figure first (124:965) · C: quote (125:1019) · D: metrics, ledger (156:1212) · E: metrics, stat cards (156:1288) · F: metrics, hero card (156:1371)
-  const MAIN = VARIANT === "A" ? "milestones" : VARIANT === "C" ? "options" : "cards"; // or "chart"; any variant takes any main block
+  const MAIN = VARIANT === "A" ? "milestones" : VARIANT === "C" ? "options" : "cards"; // or "chart" or "table"; any variant takes any main block
   const s = pres.addSlide();
   s.background = { color: C.white };
 
   // All text below is the user's, as given. Empty strings leave a slot out.
   const title = "Sample title goes here";
   const subhead = "Subhead goes here"; // "" to leave it out (the blocks move up 0.49 in); text runs keep the user's bold
-  s.addText(title, {
-    x: 0.694, y: 0.646, w: 11.479, h: 0.493,
-    fontFace: FONT, fontSize: 32, bold: true, color: C.midnight, lineSpacing: 35.5, valign: "top", margin: 0,
-  });
-  if (subhead) s.addText(subhead, {
-    x: 0.701, y: 1.278, w: 11.938, h: 0.347 * Math.max(1, subhead.length ? wrapLines(typeof subhead === "string" ? subhead : subhead.map(r => r.text).join(""), 11.938, { fontSize: 20, fontFace: FONT_MEDIUM }) : 1),
-    fontFace: FONT_MEDIUM, fontSize: 20, color: C.darkIndigo, lineSpacing: 25, valign: "top", margin: 0,
-  });
-
-  const subText = typeof subhead === "string" ? subhead : subhead.map(r => r.text).join("");
-  const subLines = subText ? wrapLines(subText, 11.938, { fontSize: 20, fontFace: FONT_MEDIUM }) : 0;
-  // Figma: 290–900 px. A 2-line subhead pushes both blocks down. DENSE uses the room down to the footer clearance (6.4 in)
-  // for a main block with a lot of text; both blocks keep the same bottom. Cards switch it on themselves for 2 groups or 7+ cards.
+  const SOURCE = "";                    // source / methodology note under both blocks: a string, or lines ["Source: …", "Methodology: …"]
+  const { top, dy } = addTitleBlock(s, title, { subhead }); // measured: a 2-line title or subhead moves both blocks down
+  const limit = addSourceNote(s, SOURCE);                    // the blocks end above the note, or 0.35 in above the footer bar
+  // Figma: 290–900 px. DENSE uses the room down to the footer clearance (6.4 in) for a main block with a lot of text; both
+  // blocks keep the same bottom. It's on whenever the title or subhead wraps; cards switch it on for 2 groups or 7+ cards.
+  // A source note takes its lines out of that room.
   const DENSE = false;
-  const top = subText ? Math.max(2.014, 1.278 + subLines * 0.347 + 0.3) : 1.528;
-  const bottom = DENSE ? 6.4 : 6.25;
+  const bottom = Math.min(DENSE || dy > 0.01 ? 6.4 : 6.25, limit);
   const M = { x: 0.694, y: top, w: 7.375, h: bottom - top };  // main block: 100–1162 px
   const P = { x: 8.486, y: top, w: 4.153, h: bottom - top };  // panel: 1222–1820 px
   const lines = (t, w, o) => wrapLines(t, w, o);
@@ -2268,7 +2317,7 @@ Light mode, white. Title and subhead, a main block on the left two-thirds and a 
       { label: "", cards: Array.from({ length: 6 }, () => ({ icon: "credit_card", num: "", title: "Card title", body: "Short description of the item, up to three lines." })) },
     ];
     const dense = groups.length > 1 || groups.reduce((n, g) => n + g.cards.length, 0) > 6;
-    if (dense) M.h = P.h = 6.4 - M.y;                                    // use the room to the footer clearance
+    if (dense) M.h = P.h = limit - M.y;                                  // use the room down to the note / footer clearance
     const cols = 3, gap = 0.208, vgap = dense ? 0.15 : gap, labelH = dense ? 0.28 : 0.3, groupGap = dense ? 0.12 : 0.15;
     const cw = (M.w - gap * (cols - 1)) / cols;                          // 334 px
     const rowsAll = groups.reduce((a, g) => a + Math.ceil(g.cards.length / cols), 0);
@@ -2347,6 +2396,16 @@ Light mode, white. Title and subhead, a main block on the left two-thirds and a 
       s.addText(r.title, { x: M.x + 0.778, y, w: 1.9, h: rh, fontFace: FONT, fontSize: 13, bold: true, color: C.midnight, valign: "middle", margin: 0 });
       s.addText(r.text, { x: M.x + 2.778, y, w: M.w - 2.95, h: rh, fontFace: FONT, fontSize: 11, color: C.darkIndigo, lineSpacing: 14.3, valign: "middle", margin: 0 });
     });
+  } else if (MAIN === "table") {
+    // A table (addBrandTable, as recipe 17): any number of rows, highlighted rows on the gradient outline, numbers right-aligned.
+    // Cells as given; a cell can be { text, colspan }. With 7+ rows it takes the DENSE room by itself.
+    const table = {
+      header: ["", "Title 1", "Title 2", "Title 3"],
+      body: Array.from({ length: 6 }, (_, i) => [`Row ${i + 1} title`, "Lorem ipsum", "Lorem ipsum", "Lorem ipsum"]),
+      highlight: 1, // body row index, [1, 4] for several, -1 for none
+    };
+    if (table.body.length > 6) M.h = P.h = limit - M.y;
+    addBrandTable(s, { x: M.x, y: M.y, w: M.w, bottom: M.y + M.h, ...table });
   } else { // MAIN === "chart": a column chart on a white card (shapes, as Chart (bar))
     const chart = {
       title: "Chart title", note: "",                 // header line: title left, a short note right
@@ -2396,8 +2455,10 @@ Light mode, white. Title and subhead, a main block on the left two-thirds and a 
   const px = P.x + 0.333, pw = P.w - 0.667;                                  // 48 px padding
   // Vertical spacing: 50 px (0.347 in) above and below the content, as in Figma. Items share the rest as equal gaps
   // (between a minimum and a maximum, 0.6 in unless the style says less); if room is still left, the label and items are centred together.
-  const pad = 0.347;
-  const spread = (heights, labelH, minGap, maxGap = 0.6) => {
+  // When the content only fits with less, the panel tightens to 36 px (0.25 in) above and below and a shorter label gap
+  // before anything shrinks further, so a 2-line title, three metrics and a source note fit without running into the footer.
+  const PADS = [0.347, 0.25];
+  const spread = (heights, labelH, minGap, maxGap = 0.6, pad = PADS[0]) => {
     const n = heights.length, used = heights.reduce((a, b) => a + b, 0), room = P.h - 2 * pad - labelH;
     const gap = n > 1 ? Math.min(maxGap, Math.max(minGap, (room - used) / (n - 1))) : 0;
     const groupH = labelH + used + gap * (n - 1);
@@ -2408,15 +2469,19 @@ Light mode, white. Title and subhead, a main block on the left two-thirds and a 
     const NUMBERED = true;         // false when the user's list has no numbers
     // Items: strings, or { text, icon } for a small Groovy Green tile before the number.
     const items = ["List item goes here", "List item goes here, up to two lines of text in the panel", "List item goes here", "List item goes here", "List item goes here", "List item goes here"];
-    const labelH = label ? 0.431 : 0;                                          // label text top → first item: 62 px
     const hasIcon = items.some(it => it && it.icon);
     const nx = px + (hasIcon ? 0.45 : 0), tx = nx + (NUMBERED ? 0.347 : 0), tw = P.x + P.w - 0.333 - tx;
-    let size = 13, hs = [];
-    for (; size >= 10.5; size -= 0.5) { // 26 px Medium as designed; smaller only if the list wouldn't fit with 36 px gaps
-      hs = items.map(it => lines(typeof it === "string" ? it : it.text, tw, { fontSize: size, fontFace: FONT_MEDIUM }) * size * 1.25 / 72);
-      if (hs.reduce((a, b) => a + b, 0) + 0.25 * (items.length - 1) <= P.h - 2 * pad - labelH) break;
+    // 26 px Medium as designed; smaller only if the list wouldn't fit with 36 px gaps, first with Figma's padding, then tight
+    const heightsAt = size => items.map(it => lines(typeof it === "string" ? it : it.text, tw, { fontSize: size, fontFace: FONT_MEDIUM }) * size * 1.25 / 72);
+    let size = 10.5, hs = heightsAt(10.5), pad = PADS[1], labelH = label ? 0.36 : 0;
+    search: for (const [pd, lh] of [[PADS[0], label ? 0.431 : 0], [PADS[1], label ? 0.36 : 0]]) { // label text top → first item: 62 px (tight 52 px)
+      for (let sz = 13; sz >= 10.5; sz -= 0.5) {
+        const h = heightsAt(sz);
+        if (h.reduce((a, b) => a + b, 0) + 0.25 * (items.length - 1) <= P.h - 2 * pd - lh) { size = sz; hs = h; pad = pd; labelH = lh; break search; }
+      }
     }
-    const { gap, top } = spread(hs, labelH, 0.25);
+    if (hs.reduce((a, b) => a + b, 0) + 0.25 * (items.length - 1) > P.h - 2 * pad - labelH) console.warn("Recipe 28 A: the list doesn't fit the panel at 10.5 pt. Ask the user before cutting anything (SKILL.md).");
+    const { gap, top } = spread(hs, labelH, 0.25, 0.6, pad);
     if (label) sectionLabel(s, label, px, top - 0.06, C.groovyGreen);           // 22 px Bold caps
     let y = top + labelH;
     items.forEach((it, i) => {
@@ -2446,8 +2511,7 @@ Light mode, white. Title and subhead, a main block on the left two-thirds and a 
       { icon: "credit_card", figure: "X.Xx", name: "Longer metric name here", caption: "What the figure measures" },
       { icon: "credit_card", figure: "XX+", name: "Metric name", caption: "What the figure measures, in one or two lines of panel text" },
     ];
-    const labelH = label ? 0.403 : 0;                                          // label text top → first metric: 58 px
-    const room = P.h - 2 * pad - labelH;
+    const labelH = label ? 0.403 : 0;                                          // label text top → first metric: 58 px (tight: 49 px)
     const fw = (t, size) => textWidth(t, { fontSize: size, bold: true }) * 1.02; // figure width, 2% headroom (Google Slides)
     const nameLines = (t, w, size) => lines(t, w, { fontSize: size, bold: true });
     const txt = (t, x, y, w, h, size, o = {}) => s.addText(t, { x, y, w, h, fontFace: FONT, fontSize: size, color: C.white, valign: "top", margin: 0, ...o });
@@ -2551,14 +2615,27 @@ Light mode, white. Title and subhead, a main block on the left two-thirds and a 
         return { ok: nl <= 2, hs, draw, minGap, maxGap: 0.347, divFrom: 2 };
       }),
     };
-    const plans = styles[VARIANT].map(plan => plan());
-    const fits = p => p.ok && p.hs.reduce((a, b) => a + b, 0) + p.minGap * (p.hs.length - 1) <= room;
-    const plan = plans.find(fits) || plans[plans.length - 1];
-    if (!fits(plan)) console.warn(`Recipe 28 ${VARIANT}: the metrics don't fit the panel at the smallest size. Try DENSE = true` +
-      (VARIANT === "D" ? "" : `, or VARIANT "D" (the ledger holds 4 metrics with 2-line captions)`) + "; if it still doesn't fit, ask the user (SKILL.md).");
-    const { gap, top } = spread(plan.hs, labelH, plan.minGap, plan.maxGap);
+    // The style's sizes, as designed first, with Figma's padding, then tight padding; then the ledger (D), which holds the
+    // most. Never past the panel: a panel that still doesn't fit warns, and the user decides what to cut.
+    const fitsIn = (p, room) => p.ok && p.hs.reduce((a, b) => a + b, 0) + p.minGap * (p.hs.length - 1) <= room + 1e-6;
+    let style = VARIANT, plan = null, pad = PADS[1], labH = label ? 0.34 : 0;
+    search: for (const st of VARIANT === "D" ? ["D"] : [VARIANT, "D"]) {
+      const plans = styles[st].map(f => f());
+      for (const [pd, lh] of [[PADS[0], labelH], [PADS[1], label ? 0.34 : 0]]) {
+        const p = plans.find(p => fitsIn(p, P.h - 2 * pd - lh));
+        if (p) { style = st; plan = p; pad = pd; labH = lh; break search; }
+      }
+    }
+    if (!plan) {
+      plan = styles[VARIANT].map(f => f()).pop();
+      console.warn(`Recipe 28 ${VARIANT}: the metrics don't fit the panel even at the smallest size and tight padding` +
+        (DENSE || dy > 0.01 || limit < 6.4 ? "" : ". Try DENSE = true") + "; ask the user before cutting anything (SKILL.md).");
+    } else if (style !== VARIANT) {
+      console.warn(`Recipe 28 ${VARIANT}: the metrics didn't fit the panel in this style, so it uses D (ledger), which holds the most. Say so at hand-off; shorter captions would keep ${VARIANT}.`);
+    }
+    const { gap, top } = spread(plan.hs, labH, plan.minGap, plan.maxGap, pad);
     if (label) sectionLabel(s, label, px, top - 0.06, C.groovyGreen);           // 22 px Bold caps
-    let y = top + labelH;
+    let y = top + labH;
     plan.draw.forEach((draw, i) => {
       if (plan.divFrom !== null && i >= plan.divFrom) s.addShape("line", { x: px, y: y - gap / 2, w: pw, h: 0, line: { color: C.darkIndigo, width: 1 } }); // 2 px Gray-200, centred in the gap
       draw(y);
@@ -2571,11 +2648,14 @@ Light mode, white. Title and subhead, a main block on the left two-thirds and a 
 ```
 
 - **When to use it:** a slide whose source has a main block and a dark panel beside it (a chart + "questions we look to answer", a timeline + "what we need from you", included features + success metrics, commercial terms + a quote). Build it here instead of splitting the slide.
+- **Room (2026-10-29):** the title and subhead are measured (`addTitleBlock`), so a 2-line title moves both blocks down instead of running into the subhead, and the blocks then use the room down to the footer clearance (DENSE). A `SOURCE` note sits under both blocks and the blocks end 0.15 in above it. A 2-line title, three metrics with 2-line captions and a 2-line source note fit in B, D and F; E switches to D (below).
+- **Panel, when it's tight:** the panel first keeps Figma's 50 px above and below; if the content doesn't fit, it tightens to 36 px before stepping sizes down further. A metrics style that still doesn't fit switches to D (ledger), which holds the most, and says so in the build output: tell the user at hand-off. If D doesn't fit either, the recipe warns: ask the user, don't cut. The panel never runs past the blocks' bottom.
+- **Table main block:** `MAIN = "table"` draws `addBrandTable()` (recipe 17) in the main block: any number of rows (7+ take the DENSE room by themselves), highlighted rows on the gradient outline, numbers right-aligned. About 10 rows fit beside the panel with a 2-line title and a 1-line note.
 - **Main block, real copy:** milestones take up to 6 (notes of 1–2 lines); cards take up to 9 in one or two labelled groups (shorter cards put the tile beside the title; body text shrinks to 9.5 pt at most, and two groups or more than 6 cards use `DENSE` room automatically); options take 1–3 cards and up to 3 rows; the chart takes up to 6 categories × 2–3 series, and lift labels get their own room so the axis stays at the data's round maximum. Text that still doesn't fit at 9.5 pt: the recipe warns; ask the user, don't cut it.
 - **Chart colours:** `C.chart` order, so two series are Groovy Green and Midnight. Give Groovy Green to the series the slide is about with `greenSeries` (a control group then takes Midnight).
 - **Panel spacing:** the content keeps Figma's 50 px above and below. A list or metrics share the remaining height as equal gaps, with each divider centred in its gap. A taller panel (a 2-line subhead, or `DENSE`) therefore spreads out instead of leaving an empty band at the bottom. Short content (3 items) is centred once the gaps reach 0.6 in (E's cards 0.21 in, F's 0.35 in).
 - **Metrics styles (Cameron, 2026-10-20):** B, D, E and F take the same `metrics` list, so switching style is a one-letter change. **B** (figure first) is the default. Pick **D** (ledger) for 4 metrics with 2-line captions or long names, **E** (stat cards) when each metric has an icon, and **F** (hero) when the first metric is the headline; F's gradient card is drawn at any size by `addStatCardGradient()`. The order is the user's: F leads with their first metric, never a reordered one. The figure, name and caption are drawn as given, with nothing shortened.
-- **Metrics, real copy** (figures like "$20M+", "2–4x", "Billions", names up to 4 words, captions up to 2 lines; a 1-line subhead): B holds 2–3, or 4 when most captions are 1 line. D holds 4 with 2-line captions. E holds 3, or 4 with 1-line captions. F holds a hero and up to 3 rows. Each style steps its figures down (B 28 → 20 pt, D 26 → 20, E 22 → 18, F's hero 32 → 24) until the panel fits; a wide figure also steps B, E and F down so the name beside it stays within 2 lines. If the smallest size still overflows, the recipe warns: try `DENSE`, then D, and ask the user before cutting anything.
+- **Metrics, real copy** (figures like "$20M+", "2–4x", "Billions", names up to 4 words, captions up to 2 lines; a 1-line subhead): B holds 2–3, or 4 when most captions are 1 line. D holds 4 with 2-line captions. E holds 3, or 4 with 1-line captions. F holds a hero and up to 3 rows. Each style steps its figures down (B 28 → 20 pt, D 26 → 20, E 22 → 18, F's hero 32 → 24) until the panel fits; a wide figure also steps B, E and F down so the name beside it stays within 2 lines. Then the panel tightens its padding, then switches to D, then warns (above).
 - **Panel, real copy:** the list shrinks from 13 pt to 10.5 pt before it would overflow; the quote shrinks from 16 pt to 12 pt.
 - **Green:** green text on the white main block is `#009A50`; on the Midnight panel it's Groovy Green (green rule). All other panel text is White (`C.white`, #FFFFFF), captions included; never a light gray. F's hero card is the one exception: its text is Midnight on the gradient, as on Stat card + image. The panel's only gray is the Gray-200 divider lines and E's card fill, which are shapes, not text.
 - **Icon colours by section:** each section with icons takes the next colour: a card group, the option rows, then the panel. On the white main block the tiles are Tinted (green, pink, teal, Midnight); on the panel they are Solid with a Midnight glyph (Groovy Green, pink, Intense Cyan, Neon Carrot). Slide 6 of the proposal: Platform green, Hands-on services pink, the metrics panel cyan. Labels, numbers and text keep the green rule.

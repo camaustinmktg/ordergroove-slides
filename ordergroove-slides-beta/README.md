@@ -22,6 +22,18 @@ Run `node audit/test-recipes.js` in the source folder before every upload: it bu
 
 ## Changelog
 
+### Fixes from the second real-deck test (2026-10-29)
+
+- **Source and methodology notes:** new `addSourceNote()` and a `const SOURCE = ""` slot on every content and data recipe (6–20, 22, 23, 28; not Card grid F, where it can't be read over the logo wall). The note sits at the foot, ends 0.35 in above the footer bar, and returns the bottom the content must end above, so cards, plots, panels and rows shorten to clear it. Stat card + image's "(Optimizely research)" line is now this slot. The source lines had no home before, and they caused most of the layout fights.
+- **Table (17) takes any number of rows and columns:** new `addBrandTable()`. Rows keep Figma's heights while there's room and share the room when there isn't; a row with wrapped text gets the height it needs; text steps down from 12 pt to 9.5 pt only when it must; it warns before it would overflow. About 13 rows fit under a 1-line title. The label column widens for long labels. "1 in 41" figures right-align as numbers.
+- **Highlighted rows at any height:** new `addGradientOutline()` draws the gradient outline for the box (it matches the Table Highlight Row PNGs to under 1/255 on the outline), so any row, or several, can take the brand highlight instead of a stand-in green outline. Before / after uses it too, and its "after" card can shorten.
+- **Recipe 28 has room for real copy:** the title and subhead are measured (`addTitleBlock()`), so a 2-line title moves both blocks down instead of running into the subhead; the blocks then use the room down to the footer clearance; the panel tightens its padding before shrinking text; a metrics style that still doesn't fit switches to D (ledger) and says so; nothing runs past the blocks' bottom. New `MAIN = "table"` main block. A 2-line title, three metrics with 2-line captions and a 2-line source note now fit.
+- **Co-branded cover without a photo:** Title with client logo + image D (Midnight) and E (white, glow along the bottom): the Ordergroove logo top left, the client's logo card top right, and a full-width title. No Figma frame yet.
+- **Cover titles keep the user's line breaks:** new `fitTitle()` sizes a cover title (50 pt as designed, down to 36) to keep each line the user broke on one line, and the subtitle follows the title's real height. Title / cover (light) A widens to the full width before it shrinks. A cover whose column can't hold the breaks warns and points to a full-width cover.
+- **Gradient panels at any size:** new `addGradientPanel()` draws Large Card Gradient 1 and Content Panel Gradient 1 for the box, so Big number, Two-column B and Content A can shorten for a note without squashing the PNG or cropping its corners.
+- **Spacing check:** `check-spacing.js` now flags text that runs into other text (OVERLAP: a 2-line title over its subhead, a cover title over its subtitle) and tables that run into the footer. The three broken slides from the test deck passed the old check.
+- **Unchanged:** every recipe's Figma sample still renders as before (pixel-compared, all 58 frames), apart from Stat card + image's source line (now 9.5 pt Regular, the note style) and a 1 px title nudge on Table.
+
 ### Photo accents and Icon columns section colours (2026-10-20)
 
 - **Photo accents:** Team and Org chart take `const ACCENT = "cyan" | "pink" | "green"` (Intense Cyan, Flamingo Pink, Groovy Green); `null`, the default, keeps Figma's look. Team's round headshots get a coloured ring only, never a colour behind the photo; Org chart's offset tile takes the colour in full. New helpers `photoAccent()` and `addPhotoRing()`. Figma: "Accent options, picked" block in Layouts.

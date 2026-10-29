@@ -120,6 +120,7 @@ Figma uses pixels on a 1920×1080 canvas. PowerPoint uses points on a 13.33"×7.
 | Body large | 30–34 | 15–17 | Regular or Medium | Line height 1.15 |
 | Body default | 24–26 | 12–13 | Regular or Medium | Line height 1.15 |
 | Caption / sub | 19–24 | 9.5–12 | Regular | |
+| Source / methodology note | 19 | 9.5 | Regular | Line height 12.35 pt; Gray-400 on light, White on dark; `addSourceNote()` |
 | Footer text | 15 | 7.5 | Regular | `addFooterText()`; baked into `Footer.png` on the bar |
 
 ## Layout defaults
@@ -127,6 +128,7 @@ Figma uses pixels on a 1920×1080 canvas. PowerPoint uses points on a 13.33"×7.
 - **Aspect ratio:** `LAYOUT_WIDE` (13.33" × 7.5") — always
 - **Margins:** 0.69" from the left and right edges, about 0.65" from the top, 0.35" minimum clear above the footer bar
 - **Spacing inside a card or panel:** equal space above and below the content (Figma's 50 px, 0.35", on the dark side panel); repeated items evenly spaced, with dividers centred in the gaps; no empty band at one end. When a box grows (a longer subhead above it, a denser layout), spread the items rather than leaving the space at the bottom. `scripts/check-spacing.js` checks this on a built deck.
+- **Source and methodology notes:** at the foot of the slide, left-aligned at the 0.69" margin, ending 0.35" above the footer bar (6.4"; 6.51" over Footer Bar 3); the content ends 0.15" above the note. `addSourceNote()` and each recipe's `SOURCE` slot. Never inside the footer clearance.
 - **Footer bar:** `addFooter(slide, { bar })`, every slide except title and closing slides. Bar 1 (default): `Footer.png` (Figma Footer Bar 1, 1920×108 at 2x) at `y: 6.75, h: 0.75, w: 13.33`. Bar 2: Bar 1 plus the slide number, bottom right. Bar 3: `footer-bar-3.png` (92 px bar, 0.64" tall) plus the confidentiality line in Bold, on tables, timelines B–D, Before / after A, Team and Org chart. Each recipe names its bar.
 - **Footer by audience:** `newPresentation({ audience })` sets it for the whole deck. `"internal"`: every footer carries "Confidential and proprietary. Do not distribute." `"external"` (customers, prospects, partners): the same footers without it. Bars 1 and 2 use `footer-bar-1-external.png`, Bar 3 drops its native line, and the text-only footer draws nothing. Figma: "Footers External (no line)" (`120:911`), under the originals in Assets.
 - **Text-only footer:** title and closing slides, `addFooterText()`: the confidentiality line, centred, 7.5 pt, at y 7.06" (internal decks only)

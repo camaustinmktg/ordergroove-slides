@@ -8,6 +8,7 @@
 // Usage from a build script (run `npm install` in the skill folder first):
 //   const { C, FONT, FONT_MEDIUM, FONT_SEMI, FONT_EXTRA, W, H, ASSETS, SAFE,
 //           accentColor, addFooter, addFooterText, addLogo, sectionLabel,
+//           addTitleBlock, addSourceNote, contentBottom, fitTitle, addBrandTable, addGradientOutline,
 //           addCard, addPill, addIcon, addIconTile, addPlaceholder,
 //           addLogoCard, addGradientShape, figmaShadow,
 //           newPresentation, saveTo } = require("./build");
@@ -262,6 +263,15 @@ function addFooterText(slide, onDark, { internal } = {}) {
     fontFace: FONT, fontSize: 7.5, color: onDark ? C.white : C.midnight,
     align: "center", valign: "top", margin: 0,
   });
+}
+
+// Top of each footer bar, and the clear space every slide keeps above it (brand-constants.md "Layout defaults").
+const FOOTER_TOP = { 1: H - 0.75, 2: H - 0.75, 3: H - 0.639 };
+const FOOTER_CLEAR = 0.35;
+
+/** Lowest y any content may reach on a slide with this footer bar: 6.4 in on Bars 1 and 2, 6.511 in on Bar 3. */
+function contentBottom(bar = 1) {
+  return FOOTER_TOP[bar] - FOOTER_CLEAR;
 }
 
 /**
@@ -620,6 +630,261 @@ function wrapLines(text, w, opts = {}) {
   }, 0);
 }
 
+/** Plain text of a string, an array of lines (one paragraph each) or an array of text runs, for measuring. */
+function plainText(t) {
+  if (t == null) return "";
+  if (!Array.isArray(t)) return String(t);
+  return t.map(r => typeof r === "string" ? r + "\n" : (r.text || "") + (r.options && r.options.breakLine ? "\n" : "")).join("").replace(/\n$/, "");
+}
+
+// ---------------------------------------------------------------------------
+// Real copy: measured titles, source notes, tables (added 2026-10-29 from the first real-deck feedback)
+// ---------------------------------------------------------------------------
+
+/**
+ * Content-slide title (H1, 32 pt Bold) and optional subhead (20 pt Medium), measured, so a 2-line title or
+ * subhead pushes everything under it down instead of running into it. Figma's positions for one line each:
+ * title at 100,93 px, subhead 0.632 in below the title's top, the body 0.389 in under the subhead (2.014 in).
+ * A title that would run past 2 lines at 32 pt steps down to 28 pt; past 2 lines at 28 pt it warns.
+ * label: optional section label above the title (the title moves down 0.23 in, as in layout-recipes.md).
+ * subW: the subhead's width (recipes with a legend or pill top right keep Figma's narrower box).
+ * Returns { top, dy, bottom, size, titleLines, subLines }. top: where the body starts. dy: how far below
+ * Figma's body top (2.014 in, or 1.528 in without a subhead) that is, for recipes that place their body at
+ * fixed positions: add dy to each y, or take it out of the body's height.
+ */
+function addTitleBlock(slide, title, { subhead = "", isDark = false, x = 0.694, y = 0.646, w = 11.479, subW = 11.938, label = "", subColor, subFontFace = FONT_MEDIUM, gap = 0.389 } = {}) {
+  if (label) { sectionLabel(slide, label, x, y - 0.046, accentColor(isDark)); y += 0.23; }
+  const tText = plainText(title);
+  let size = 32, lines = wrapLines(tText, w, { fontSize: 32, bold: true });
+  if (lines > 2) {
+    const at28 = wrapLines(tText, w, { fontSize: 28, bold: true });
+    if (at28 < lines) { size = 28; lines = at28; }
+    if (lines > 2) console.warn(`addTitleBlock: "${tText.slice(0, 48)}…" runs to ${lines} lines at ${size} pt. Slide titles read best in 1–2 lines; keep the user's words and check the slide.`);
+  }
+  const lineSpacing = size * 35.5 / 32, tH = lines * lineSpacing / 72; // 35.5 pt lines at 32 pt
+  slide.addText(title, {
+    x, y, w, h: tH, fontFace: FONT, fontSize: size, bold: true, color: isDark ? C.white : C.midnight,
+    lineSpacing, valign: "top", margin: 0,
+  });
+  let bottom = y + tH, subLines = 0;
+  const sText = plainText(subhead);
+  if (sText) {
+    const sy = bottom + 0.139;
+    subLines = wrapLines(sText, subW, { fontSize: 20, fontFace: subFontFace });
+    slide.addText(subhead, {
+      x: x + 0.007, y: sy, w: subW, h: subLines * 0.347,
+      fontFace: subFontFace, fontSize: 20, color: subColor || (isDark ? C.white : C.darkIndigo), lineSpacing: 25, valign: "top", margin: 0,
+    });
+    bottom = sy + subLines * 0.347;
+  }
+  const top = bottom + gap;
+  return { top, dy: top - (sText ? 2.014 : 1.528), bottom, size, titleLines: lines, subLines };
+}
+
+// Source and methodology notes: Caption size, the type scale's smallest (19 px, 1.3 line height).
+const SOURCE_FONT = { fontSize: 9.5, lineSpacing: 12.35 };
+
+/** Height in inches of a source note in a w-inch box (0 for no note). */
+function sourceNoteHeight(text, w = 11.944) {
+  const t = plainText(text);
+  return t.trim() ? wrapLines(t, w, { fontSize: SOURCE_FONT.fontSize }) * SOURCE_FONT.lineSpacing / 72 : 0;
+}
+
+/**
+ * Source and methodology note at the foot of a content slide: the user's words, as given, 9.5 pt, Gray-400 on
+ * light backgrounds and White on dark ones (text on Midnight is White), left-aligned, ending 0.35 in above the
+ * footer bar. text: a string; an array of strings, one paragraph each (["Source: …", "Methodology: …"]); or
+ * text runs (to keep the user's bold "Source:"). "" or null draws nothing.
+ * Call it before laying out the slide's body: it returns the y the body must end above (the note's top less
+ * `gap`), or contentBottom(bar) when there's no note. bottom: a different lowest edge for the note.
+ * x, w, align: a note under one block rather than the whole slide (Stat card + image centres it under its card).
+ */
+function addSourceNote(slide, text, { bar = 1, isDark = false, x = 0.694, w = 11.944, gap = 0.15, bottom, align = "left" } = {}) {
+  const limit = bottom != null ? bottom : contentBottom(bar);
+  const h = sourceNoteHeight(text, w);
+  if (!h) return limit;
+  const lines = Math.round(h * 72 / SOURCE_FONT.lineSpacing);
+  if (lines > 3) console.warn(`addSourceNote: the note runs to ${lines} lines; each line takes 0.17 in from the slide's content.`);
+  const body = Array.isArray(text) && text.every(l => typeof l === "string")
+    ? text.map((l, i) => ({ text: l, options: { breakLine: i < text.length - 1 } }))
+    : text;
+  slide.addText(body, {
+    x, y: limit - h, w, h, fontFace: FONT, fontSize: SOURCE_FONT.fontSize, color: isDark ? C.white : C.soft,
+    lineSpacing: SOURCE_FONT.lineSpacing, align, valign: "top", margin: 0, objectName: "Source note",
+  });
+  return limit - h - gap;
+}
+
+/**
+ * Size and line count for a cover or closing title (Hero, 50 pt Bold, 1.1 line height; recipes 1–3, 26) in a
+ * w-inch column. The user's own line breaks come first: with breaks, it takes the largest size from max down
+ * to min at which every line they broke stays one line. Without breaks (or if no size keeps them), it takes
+ * the largest size at which the title wraps to 2 lines at most, then 3 (maxLines).
+ * Returns { size, lines, lineH, h (in), lineSpacing (pt), kept }. kept: false when the user's breaks couldn't
+ * hold in this column; the recipes then try a wider column, and warn if there is none.
+ */
+function fitTitle(text, w, { max = 50, min = 36, maxLines = 3, lineHeight = 1.1, charSpacing = 0, bold = true, fontFace = FONT } = {}) {
+  const t = plainText(text);
+  // Negative tracking is left out of the measure: Google Slides drops letter spacing, so the title must fit without it
+  const opts = s => ({ fontSize: s, bold, fontFace, charSpacing: Math.max(0, charSpacing) * s / max });
+  const out = (size, lines, kept) => ({ size, lines, lineH: size * lineHeight / 72, h: lines * size * lineHeight / 72, lineSpacing: size * lineHeight, kept });
+  const broken = t.split("\n");
+  if (broken.length > 1) {
+    for (let s = max; s >= min; s -= 1) if (broken.every(l => textWidth(l, opts(s)) <= w)) return out(s, broken.length, true);
+  }
+  for (const cap of [Math.max(2, broken.length), maxLines]) {
+    for (let s = max; s >= min; s -= 1) {
+      const n = wrapLines(t, w, opts(s));
+      if (n <= cap) return out(s, n, broken.length === 1);
+    }
+  }
+  return out(min, wrapLines(t, w, opts(min)), false);
+}
+
+/**
+ * Gradient outline card at any size: white, a 4 px Intense Cyan → Laser Lemon outline, 10 px corners and a soft
+ * shadow. Figma's Gradient Outline Card 1 and Table Highlight Row 1 / 2 are this one shape at three sizes; the
+ * PNGs only fit those three, so a row of any other height had no highlight. Rendered for the box, the way
+ * Figma resizes it (matches table-highlight-row-1.png to under 1/255 per channel on the outline).
+ * x, y, w, h: the shape's own box; the shadow falls outside it (24 px at the sides, 10 px above, 38 px below).
+ * r: corner radius in inches. Without @resvg/resvg-js it falls back to the Table Highlight Row 1 PNG, stretched.
+ */
+function addGradientOutline(slide, x, y, w, h, { r = 0.069, stroke = 0.028, fill = C.white, shadow = true } = {}) {
+  const pad = shadow ? { l: 24 / 144, t: 10 / 144, r: 24 / 144, b: 38 / 144 } : { l: 0, t: 0, r: 0, b: 0 };
+  const box = { x: x - pad.l, y: y - pad.t, w: w + pad.l + pad.r, h: h + pad.t + pad.b };
+  if (!Resvg) { slide.addImage({ path: ASSETS.tableHighlightRow1, ...box }); return { x, y, w, h }; }
+  const k = 288, P = v => (v * k).toFixed(1); // 2x at 144 px per inch
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${Math.round(box.w * k)}" height="${Math.round(box.h * k)}"><defs>` +
+    `<linearGradient id="g" gradientUnits="objectBoundingBox" x1="0.997" y1="0.252" x2="0.046" y2="0.7265">` +
+    `<stop offset="0" stop-color="#00FAFF"/><stop offset="1" stop-color="#EAFF00"/></linearGradient>` +
+    (shadow ? `<filter id="s" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="${P(14 / 144)}" stdDeviation="${P(11 / 144)}" flood-color="#000" flood-opacity="0.1"/></filter>` : "") +
+    `</defs><rect x="${P(pad.l + stroke / 2)}" y="${P(pad.t + stroke / 2)}" width="${P(w - stroke)}" height="${P(h - stroke)}" rx="${P(r)}" ` +
+    `fill="#${fill}" stroke="url(#g)" stroke-width="${P(stroke)}"${shadow ? ' filter="url(#s)"' : ""}/></svg>`;
+  const png = new Resvg(svg).render().asPng();
+  slide.addImage({ data: "image/png;base64," + png.toString("base64"), ...box });
+  return { x, y, w, h };
+}
+
+/**
+ * Intense Cyan → Laser Lemon gradient card or panel at any size: Figma's Large Card Gradient 1 (Big number A,
+ * Two-column B) and Content Panel Gradient 1 (Content A, the gradient at 10%), which share the outline's gradient
+ * and 10 px corners. Rendered for the box, so a card can shorten (for a source note, say) without being squashed
+ * or losing its corners to a crop. opacity: 1 for the card, 0.1 for the content panel. Without @resvg/resvg-js it
+ * places the PNG at the box's size.
+ */
+function addGradientPanel(slide, x, y, w, h, { r = 0.069, opacity = 1 } = {}) {
+  if (!Resvg) { slide.addImage({ path: opacity < 1 ? ASSETS.contentPanelGradient : ASSETS.largeCardGradient, x, y, w, h }); return; }
+  const k = 288, P = v => (v * k).toFixed(1); // 2x at 144 px per inch
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${Math.round(w * k)}" height="${Math.round(h * k)}"><defs>` +
+    `<linearGradient id="g" gradientUnits="objectBoundingBox" x1="0.997" y1="0.252" x2="0.046" y2="0.7265">` +
+    `<stop offset="0" stop-color="#00FAFF"/><stop offset="1" stop-color="#EAFF00"/></linearGradient></defs>` +
+    `<rect width="${P(w)}" height="${P(h)}" rx="${P(r)}" fill="url(#g)" fill-opacity="${opacity}"/></svg>`;
+  const png = new Resvg(svg).render().asPng();
+  slide.addImage({ data: "image/png;base64," + png.toString("base64"), x, y, w, h });
+}
+
+/**
+ * Brand table (recipe 17, and recipe 28's table main block), as a native, editable table: Midnight rule under the
+ * header, Gray-950 on every other row, and highlighted rows in Bold on a gradient outline (any row height).
+ * Fits any number of rows between y and bottom. Rows keep Figma's height (0.861 in up to 4 rows, 0.639 in from 5)
+ * while there's room and share the room evenly when there isn't; a row whose text wraps gets the height it needs.
+ * Text is 12 pt and steps down (to 9.5 pt, the type scale's smallest) only when the rows wouldn't fit their text.
+ *   header:    the column heads, the user's text as given; the first is the row-label column ("" for none)
+ *   body:      rows of cells; a cell is text or { text, colspan } (a spanning cell is left-aligned)
+ *   highlight: a body row index, an array of them, or -1 for none
+ *   colW:      column widths in inches. Default: the label column at Figma's share (2.41 of 11.944 in), wider
+ *              if the longest label needs it (up to 40%), and the other columns equal.
+ * Columns of numbers (every filled cell a figure: "97K", "$2.4M", "3.5%", "1 in 41") are right-aligned, header too.
+ * Returns { bottom, fontSize, headH, rowH, fits }. fits false: the rows overflow even at 9.5 pt; it warns.
+ */
+function addBrandTable(slide, { x, y, w, bottom, header, body, highlight = -1, colW } = {}) {
+  const NONE = { type: "none" };
+  const mx = 0.104, vpad = 0.07;                     // cell margin 15 px each side; space above and below text
+  const hl = new Set([].concat(highlight).filter(i => i >= 0 && i < body.length));
+  const cellText = c => String((c && typeof c === "object" ? c.text : c) ?? "");
+  const span = c => (c && typeof c === "object" && c.colspan) || 1;
+  const isNum = t => /^[~≈+\-−]?[$€£]?\d[\d.,]*\s*(%|[KMB]|x|\+|bn|m|k)?$/i.test(t.trim()) || /^\d[\d,]* in \d[\d,]*$/.test(t.trim()); // "1 in 41" too
+  const nCols = header.length;
+  const numCol = header.map((_, ci) => ci > 0 && body.every(r => r.length !== nCols || cellText(r[ci]) === "" || isNum(cellText(r[ci]))));
+
+  let widths = colW;
+  if (!widths) {
+    const labels = [header[0], ...body.filter(r => span(r[0]) === 1).map(r => r[0])];
+    const need = Math.max(...labels.map(l => textWidth(cellText(l), { fontSize: 12, fontFace: FONT_SEMI }))) + 2 * mx + 0.02;
+    const lw = Math.min(w * 0.4, Math.max(w * 2.41 / 11.944, need));
+    widths = [lw, ...Array(nCols - 1).fill((w - lw) / (nCols - 1))];
+  }
+  const cellW = (row, i) => {
+    let col = 0;
+    for (let k = 0; k < i; k++) col += span(row[k]);
+    return widths.slice(col, col + span(row[i])).reduce((a, b) => a + b, 0) - 2 * mx;
+  };
+  const face = (col, hi) => ({ fontFace: hi ? FONT : col === 0 ? FONT_SEMI : FONT, bold: hi });
+  const rowLines = (row, size, hi) => {
+    let col = 0;
+    return Math.max(1, ...row.map((c, i) => { const n = wrapLines(cellText(c), cellW(row, i), { fontSize: size, ...face(col, hi) }); col += span(c); return n; }));
+  };
+
+  // Largest text size at which every row fits its text in the room
+  let size, lh, headH, needs;
+  for (size of [12, 11.5, 11, 10.5, 10, 9.5]) {
+    lh = size * 1.2 / 72;
+    const headLines = Math.max(1, ...header.map((c, i) => wrapLines(cellText(c), widths[i] - 2 * mx, { fontSize: size, fontFace: FONT_SEMI })));
+    headH = Math.max(headLines * lh + 2 * vpad, size >= 11 ? 0.472 : 0.4); // 68 px as designed
+    needs = body.map((r, ri) => rowLines(r, size, hl.has(ri)) * lh + 2 * vpad);
+    if (headH + needs.reduce((a, b) => a + b, 0) <= bottom - y + 1e-6) break;
+  }
+  const room = bottom - y - headH;
+  const fits = needs.reduce((a, b) => a + b, 0) <= room + 1e-6;
+  if (!fits) console.warn(`addBrandTable: ${body.length} rows don't fit above ${bottom.toFixed(2)} in even at 9.5 pt. Ask the user before cutting or splitting (SKILL.md).`);
+  // Each row: Figma's height (or less, shared evenly, so the table fits), or what its text needs if that's more
+  const ideal = body.length <= 4 ? 0.861 : 0.639;
+  let base = Math.min(ideal, room / body.length);
+  const total = b => needs.reduce((s, nd) => s + Math.max(nd, b), 0);
+  while (base > 0.2 && total(base) > room + 1e-6) base -= 0.005;
+  const heights = needs.map(nd => Math.max(nd, base));
+  const rowY = [];
+  heights.reduce((yy, rh) => (rowY.push(yy), yy + rh), y + headH);
+  const shaded = ri => ri % 2 === 1 && !hl.has(ri);
+
+  // Highlight outlines go under the table so its text sits on top. Figma: the outline is 61 px wider than the
+  // table and 0.1 in taller than a 0.639 in row (0.014 in shorter than a 0.861 in row). Next to a shaded row it
+  // stops at the row edge, so the shading doesn't cover its stroke.
+  hl.forEach(ri => {
+    const rh = heights[ri];
+    const ext = (0.1 - 0.114 * Math.min(1, Math.max(0, (rh - 0.639) / 0.222))) / 2;
+    let top = rowY[ri] - ext, bot = rowY[ri] + rh + ext;
+    if (ri === 0 || shaded(ri - 1)) top = Math.max(top, rowY[ri] + (ri === 0 ? 0.04 : 0.007));
+    if (shaded(ri + 1)) bot = Math.min(bot, rowY[ri] + rh - 0.007);
+    addGradientOutline(slide, x - 0.212, top, w + 0.424, bot - top);
+  });
+
+  const headRow = header.map((text, ci) => ({ text: cellText(text), options: {
+    fontFace: FONT_SEMI, color: C.midnight, align: ci === 0 ? "left" : numCol[ci] ? "right" : "center",
+    border: [NONE, NONE, { pt: 1.5, color: C.midnight }, NONE],
+  } }));
+  const bodyRows = body.map((row, ri) => {
+    let ci = 0;
+    return row.map(cell => {
+      const hi = hl.has(ri), sp = span(cell), col = ci;
+      ci += sp;
+      return { text: cellText(cell), options: {
+        ...(sp > 1 ? { colspan: sp } : {}),
+        ...face(col, hi),
+        color: hi ? C.midnight : C.darkIndigo,
+        align: col === 0 || sp > 1 ? "left" : numCol[col] ? "right" : "center",
+        fill: shaded(ri) ? { color: C.gray950 } : undefined, // odd rows and the highlight stay unfilled so the outline shows
+        border: [NONE, NONE, NONE, NONE],
+      } };
+    });
+  });
+  slide.addTable([headRow, ...bodyRows], {
+    x, y, w, colW: widths, rowH: [headH, ...heights],
+    fontFace: FONT, fontSize: size, valign: "middle", margin: [0, mx, 0, mx],
+  });
+  return { bottom: y + headH + heights.reduce((a, b) => a + b, 0), fontSize: size, headH, rowH: heights, fits };
+}
+
 /**
  * Gradient Highlight 1 (Figma 10:724: 234×28 px, Intense Cyan → Laser Lemon) at any width, the way
  * Figma resizes it: the gradient is rendered for the new box, not stretched. Put it under a big
@@ -934,6 +1199,8 @@ module.exports = {
   accentColor, subtitleColor, sectionLabel,
   imageSize,
   addFooter, addFooterText, addLogo, customerLogo, addLogoFit, addLogoCard,
+  FOOTER_TOP, contentBottom, plainText, addTitleBlock, SOURCE_FONT, sourceNoteHeight, addSourceNote, fitTitle,
+  addGradientOutline, addGradientPanel, addBrandTable,
   addCard, addPill, addPlaceholder, figmaShadow, addGradientShape,
   addIcon, addIconTile, TILE_COLORS, tileColor, addSectionTile,
   PHOTO_ACCENTS, photoAccent, addPhotoRing,
